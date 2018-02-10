@@ -45,7 +45,7 @@ function loadFile(mapPath)
     return map, properties
 end
 
-function maps.loadmap(mapPath)
+function maps.loadMap(mapPath)
     local map, properties = loadFile(mapPath)
 
     -- Create gameobjects

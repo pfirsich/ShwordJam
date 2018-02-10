@@ -1,6 +1,6 @@
 local utils = require("utils")
 
-local GameObject = class("GameObject")
+local GameObject = utils.class("GameObject")
 
 function GameObject.static.resetWorld()
     GameObject.static.world = {}
