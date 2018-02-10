@@ -30,7 +30,6 @@ function requireScenes()
         end
 
         if reqPath then
-            print(reqPath)
             local scene = require(reqPath)
             scenes[scene.name] = scene
         end

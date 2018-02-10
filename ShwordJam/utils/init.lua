@@ -1,7 +1,7 @@
 local utils = {}
 
 utils.inspect = require("libs.inspect")
-utils.class = require("libs.middleclass")
+utils.class = require("libs.class")
 
 function utils.callNonNil(f, ...)
     if f then f(...) end

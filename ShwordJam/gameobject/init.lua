@@ -1,31 +1,32 @@
 local utils = require("utils")
+local HC = require("libs.HC")
 
 local GameObject = utils.class("GameObject")
 
-function GameObject.static.resetWorld()
-    GameObject.static.world = {}
-    GameObject.static.collider = HC.new(1)
+function GameObject.resetWorld()
+    GameObject.world = {}
+    GameObject.collider = HC.new(1)
 end
 
 local function gameObjectCmp(a, b)
     return a.depth < b.depth
 end
 
-function GameObject.static.updateAll()
+function GameObject.updateAll()
     for _, object in ipairs(GameObject.world) do
         object.update()
     end
     table.sort(GameObject.world, gameObjectCmp)
 end
 
-function GameObject.static.drawAll()
+function GameObject.drawAll()
     for _, object in ipairs(GameObject.world) do
         object.draw()
     end
 end
 
 function GameObject:initialize()
-    table.insert(GameObject.static.world, self)
+    table.insert(GameObject.world, self)
     self.depth = 0
 end
 

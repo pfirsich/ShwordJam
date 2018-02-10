@@ -1,11 +1,13 @@
 lg = love.graphics
 lf = love.filesystem
 
+require("libs.HC")
+
 require("libs.strict")
 
-scenes = require("scenes")
-const = require("constants")
-utils = require("utils")
+local scenes = require("scenes")
+local const = require("constants")
+local utils = require("utils")
 
 function love.load()
     requireScenes()
