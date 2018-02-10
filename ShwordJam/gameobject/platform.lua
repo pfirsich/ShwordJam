@@ -1,7 +1,7 @@
 local utils = require("utils")
 local GameObject = require("GameObject")
 
-Platform = class("Platform", GameObject)
+Platform = utils.class("Platform", GameObject)
 
 function Platform:initialize(points, texture)
     GameObject.initialize(self)
@@ -23,6 +23,8 @@ function Platform:initialize(points, texture)
     if texture then
         self.mesh:setTexture(texture)
     end
+
+    self.shape = GameObject.collider:polygon(points)
 end
 
 function Platform:update()
@@ -32,3 +34,5 @@ end
 function Platform:draw()
     lg.draw(mesh)
 end
+
+return Platform
