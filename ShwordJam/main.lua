@@ -1,6 +1,8 @@
 lg = love.graphics
 lf = love.filesystem
 
+require("libs.strict")
+
 scenes = require("scenes")
 const = require("constants")
 utils = require("utils")
