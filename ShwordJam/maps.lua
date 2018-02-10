@@ -2,14 +2,14 @@ local utils = require("utils")
 
 local maps = {}
 
-function lines(s)
+local function lines(s)
     if s:sub(-1) ~= "\n" then
          s = s .. "\n"
      end
     return s:gmatch("(.-)\n")
 end
 
-function loadFile(mapPath)
+local function loadFile(mapPath)
     local contents, sizeOrError = love.filesystem.read("media/maps/" .. mapPath .. ".lvl")
 
     if not contents then
