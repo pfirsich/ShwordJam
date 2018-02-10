@@ -17,7 +17,7 @@ function loadFile(mapPath)
     end
 
     local properties = {}
-    local map = {}
+    local tileMap = {}
     local newlineCount = 0
 
     local y = 1
@@ -34,15 +34,15 @@ function loadFile(mapPath)
                 properties[key] = value
             end
         elseif newlineCount >= 2 then
-            map[y] = {}
+            tileMap[y] = {}
             for x = 1, line:len() do
-                map[y][x] = line:sub(x, x)
+                tileMap[y][x] = line:sub(x, x)
             end
 
             y = y + 1
         end
     end
-    return map, properties
+    return tileMap, properties
 end
 
 function maps.loadMap(mapPath)
