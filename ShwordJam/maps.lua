@@ -4,14 +4,16 @@ local maps = {}
 
 local tileTypes = utils.table.enum({
     "EMPTY",
-    "PLATFORM",
     "SPAWN_POINT",
+    "STONE",
+    "GRASS",
 })
 
 local tileCharTypeMap = {
     [" "] = tileTypes.EMPTY,
-    ["#"] = tileTypes.PLATFORM,
     ["s"] = tileTypes.SPAWN_POINT,
+    ["#"] = tileTypes.STONE,
+    ["\""] = tileTypes.GRASS,
 }
 
 local function lines(s)
@@ -93,10 +95,10 @@ local function buildChunks(tileMap)
     local markedMap = {}
     local chunks = {}
 
-    local function findChunk(x, y)
+    local function findChunk(x, y, type)
         local tileType = at(tileMap, y, x)
 
-        if tileType and tileType ~= tileTypes.EMPTY and not at(markedMap, y, x) then
+        if tileType and tileType ~= tileTypes.EMPTY and tileType == type and not at(markedMap, y, x) then
             local chunk = {}
 
             table.insert(chunk, {
@@ -106,10 +108,10 @@ local function buildChunks(tileMap)
             })
             markedMap[y][x] = true
 
-            utils.table.extend(chunk, findChunk(x - 1, y))
-            utils.table.extend(chunk, findChunk(x + 1, y))
-            utils.table.extend(chunk, findChunk(x, y - 1))
-            utils.table.extend(chunk, findChunk(x, y + 1))
+            utils.table.extend(chunk, findChunk(x - 1, y, tileType))
+            utils.table.extend(chunk, findChunk(x + 1, y, tileType))
+            utils.table.extend(chunk, findChunk(x, y - 1, tileType))
+            utils.table.extend(chunk, findChunk(x, y + 1, tileType))
 
             return chunk
         else
@@ -126,7 +128,7 @@ local function buildChunks(tileMap)
 
     for y, row in ipairs(tileMap) do
         for x, tileType in ipairs(row) do
-            table.insert(chunks, findChunk(x, y))
+            table.insert(chunks, findChunk(x, y, tileType))
         end
     end
 
