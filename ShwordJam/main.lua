@@ -33,13 +33,13 @@ local a = Animaton(o, {
     },
     {
         _time = 1,
-        x = 10,
-        y = 120,
+        x = 50,
+        y = 8,
     },
-})
+}, true)
 
-for i= 1, 200 do
-    local t = i / 200
+for i= 0, 40 do
+    local t = i / 20
     a:apply(t)
     for i = 1, o.x do
         io.write(' ')

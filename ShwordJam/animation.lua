@@ -4,19 +4,19 @@ local utils = require("utils")
 
 local Animaton = class("Animaton")
 
-function Animaton:initialize(object, keyFrames)
+function Animaton:initialize(object, keyFrames, loop)
     self.object = object
     self.keyFrames = keyFrames
     self.animatedKeys = {}
-
-    for _, keyFrame in ipairs(self.keyFrames) do
-        for key in pairs(keyFrame) do
-            self.animatedKeys[key] = true
-        end
-    end
+    self.length = keyFrames[#keyFrames]._time
+    self.loop = loop or false
 end
 
 function Animaton:apply(time)
+    if self.loop then
+        time = time % self.length
+    end
+
     local prevForKey = {}
     local nextForKey = {}
     for _, keyFrame in ipairs(self.keyFrames) do
@@ -55,6 +55,8 @@ function Animaton:apply(time)
                 local valueOffset = valueBetweenFrames * progress
                 self.object[key] = prev.value + valueOffset
             end
+        else
+            self.object[key] = prev.value
         end
     end
 end
