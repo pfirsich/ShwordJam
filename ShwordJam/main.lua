@@ -8,6 +8,50 @@ require("libs.strict")
 local scenes = require("scenes")
 local const = require("constants")
 local utils = require("utils")
+local Animaton = require("animation")
+
+
+local o = {x = 8}
+local a = Animaton(o, {
+    {
+        _time = 0,
+        x = 50,
+        y = 8,
+    },
+    {
+        _time = 0.2,
+        x = 10,
+    },
+    {
+        _time = 0.4,
+        x = 50,
+        y = 30,
+    },
+    {
+        _time = 0.8,
+        x = 80,
+    },
+    {
+        _time = 1,
+        x = 10,
+        y = 120,
+    },
+})
+
+for i= 1, 200 do
+    local t = i / 200
+    a:apply(t)
+    for i = 1, o.x do
+        io.write(' ')
+    end
+    print('.')
+    for i = 1, o.y do
+        io.write(' ')
+    end
+    print('+')
+    -- print(t, o.x)
+end
+
 
 function love.load()
     requireScenes()
