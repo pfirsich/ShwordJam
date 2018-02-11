@@ -4,8 +4,6 @@ local GameObject = require("gameobject")
 Platform = utils.class("Platform", GameObject)
 
 function Platform:initialize(points, texture)
-    print(utils.inspect(points))
-
     GameObject.initialize(self)
     local triangles = love.math.triangulate(points)
     local vertices = {}
@@ -26,7 +24,7 @@ function Platform:initialize(points, texture)
         self.mesh:setTexture(texture)
     end
 
-    self.shape = GameObject.collider:polygon(points)
+    self.shape = GameObject.collider:polygon(unpack(points))
 end
 
 function Platform:update()

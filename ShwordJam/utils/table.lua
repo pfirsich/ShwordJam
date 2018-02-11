@@ -47,4 +47,12 @@ function tableUtils.inList(list, elem)
     return tableUtils.indexOf(list, elem) ~= nil
 end
 
+function tableUtils.inverseTable(tbl)
+    local ret = {}
+    for k, v in pairs(tbl) do
+        ret[v] = k
+    end
+    return ret
+end
+
 return tableUtils

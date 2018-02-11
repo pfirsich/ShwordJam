@@ -3,15 +3,18 @@ local utils = require("utils")
 local maps = {}
 
 local tileTypes = utils.table.enum({
+    "EMPTY",
     "PLATFORM",
     "SPAWN_POINT",
 })
 
 local tileCharTypeMap = {
-    [" "] = nil,
+    [" "] = tileTypes.EMPTY,
     ["#"] = tileTypes.PLATFORM,
     ["s"] = tileTypes.SPAWN_POINT,
 }
+
+local whatever = utils.table.inverseTable(tileCharTypeMap)
 
 local function lines(s)
     if s:sub(-1) ~= "\n" then
@@ -29,36 +32,34 @@ local function loadFile(mapPath)
 
     local properties = {}
     local tileMap = {}
-    local newlineCount = 0
+    local parseProperties = true
 
     local y = 1
     for line in lines(contents) do
         if line == "" then
-            newlineCount = newlineCount + 1
-        elseif newlineCount < 2 then
-            newlineCount = 0
-        end
+            parseProperties = false
+        else
+            if parseProperties then
+                local key, value = line:match("(.-)%s*:%s*(.*)")
+                if key then
+                    properties[key] = value
+                end
+            else
+                tileMap[y] = {}
+                for x = 1, line:len() do
+                    local char = line:sub(x, x)
+                    local type = tileCharTypeMap[char]
+                    tileMap[y][x] = type
+                end
 
-        if newlineCount == 0 then
-            local key, value = line:match("(.-)%s*:%s*(.*)")
-            if key then
-                properties[key] = value
+                y = y + 1
             end
-        elseif newlineCount >= 2 then
-            tileMap[y] = {}
-            for x = 1, line:len() do
-                local char = line:sub(x, x)
-                local type = tileCharTypeMap[char]
-                tileMap[y][x] = type
-            end
-
-            y = y + 1
         end
     end
     return tileMap, properties
 end
 
-local function cordTable(x, y)
+local function coordTable(x, y)
     return {
         x = x,
         y = y,
@@ -69,9 +70,9 @@ local function at(t, y, x)
     return t[y] and t[y][x]
 end
 
-local function cordInList(list, x, y)
-    for i, v in ipairs(list) do
-        if v and v.x == x and v.y == y then
+local function coordInList(list, x, y)
+    for _, v in ipairs(list) do
+        if v.x == x and v.y == y then
             return true
         end
     end
@@ -86,14 +87,14 @@ local marchingRoute = {
     [4] = 'right',
     [5] = 'up',
     [6] = 'special',
-    [7] = 'right',
+    [7] = 'left',
     [8] = 'down',
     [9] = 'special',
     [10] = 'down',
     [11] = 'down',
-    [12] = 'left',
+    [12] = 'right',
     [13] = 'up',
-    [14] = 'left',
+    [14] = 'right',
     [15] = 'error',
 }
 
@@ -105,7 +106,7 @@ local function buildMap(mapPath)
     local function findGroup(x, y)
         local tileType = at(tileMap, y, x)
 
-        if tileType and not at(markedMap, y, x) then
+        if tileType and tileType ~= tileTypes.EMPTY and not at(markedMap, y, x) then
             local group = {}
 
             table.insert(group, {
@@ -139,6 +140,28 @@ local function buildMap(mapPath)
         end
     end
 
+    local debugMap = {}
+    for y = 1, #tileMap do
+        debugMap[y] = {}
+        for x = 1, #tileMap[y] do
+            debugMap[y][x] = " "
+        end
+    end
+
+    local c = string.byte("A")
+    for _, group in ipairs(groups) do
+        for _, tile in ipairs(group) do
+            debugMap[tile.y][tile.x] = string.char(c)
+        end
+        c = c + 1
+    end
+
+    for y = 1, #debugMap do
+        for x = 1, #debugMap[y] do
+            io.write(debugMap[y][x])
+        end
+        io.write("\n")
+    end
 
     local polygons = {}
 
@@ -146,52 +169,62 @@ local function buildMap(mapPath)
         local polygon = {}
         repeat
             local point = nil
+
+            local x
+            local y
+
             if #polygon == 0 then
-                point = group[1]
+                table.insert(polygon, group[1].x)
+                table.insert(polygon, group[1].y)
+                x = group[1].x
+                y = group[1].y
             else
-                local x = polygon[#polygon].x
-                local y = polygon[#polygon].y
+                x = polygon[#polygon-1]
+                y = polygon[#polygon-0]
+            end
 
-                local neighborsHash = 0
+            local neighborsHash = 0
 
-                if cordInList(group, x, y - 1) then
-                    neighborsHash = neighborsHash + 1
-                end
-                if cordInList(group, x - 1, y - 1) then
-                    neighborsHash = neighborsHash + 2
-                end
-                if cordInList(group, x, y) then
-                    neighborsHash = neighborsHash + 4
-                end
-                if cordInList(group, x - 1, y) then
-                    neighborsHash = neighborsHash + 8
-                end
+            if coordInList(group, x, y - 1) then
+                neighborsHash = neighborsHash + 1
+            end
+            if coordInList(group, x - 1, y - 1) then
+                neighborsHash = neighborsHash + 2
+            end
+            if coordInList(group, x, y) then
+                neighborsHash = neighborsHash + 4
+            end
+            if coordInList(group, x - 1, y) then
+                neighborsHash = neighborsHash + 8
+            end
 
-                local whatToDo = marchingRoute[neighborsHash]
+            local whatToDo = marchingRoute[neighborsHash]
 
-                if whatToDo == 'special' then
-                    error('Unhandled special case', x, y)
-                elseif whatToDo == 'error' then
-                    error(('Error at %d %d with hash %d'):format(x, y, neighborsHash))
-                elseif whatToDo == 'up' then
-                    point = {x = x, y = y - 1}
-                elseif whatToDo == 'down' then
-                    point = {x = x, y = y + 1}
-                elseif whatToDo == 'right' then
-                    point = {x = x + 1, y = y}
-                elseif whatToDo == 'left' then
-                    point = {x = x - 1, y = y}
-                else
-                    error("Invalid whatToDo " .. whatToDo)
-                end
+            if whatToDo == 'special' then
+                error('Unhandled special case', x, y)
+            elseif whatToDo == 'error' then
+                error(('Error at %d %d with hash %d'):format(x, y, neighborsHash))
+            elseif whatToDo == 'up' then
+                point = {x = x, y = y - 1}
+            elseif whatToDo == 'down' then
+                point = {x = x, y = y + 1}
+            elseif whatToDo == 'right' then
+                point = {x = x + 1, y = y}
+            elseif whatToDo == 'left' then
+                point = {x = x - 1, y = y}
+            else
+                error("Invalid whatToDo " .. whatToDo)
             end
 
             local knownPoint = false
 
-            if #polygon ~= 0 and point.x == polygon[1].x and point.y == polygon[1].y then
+            if #polygon ~= 0 and
+                    point.x == polygon[1] and
+                    point.y == polygon[2] then
                 knownPoint = true
             else
-                table.insert(polygon, point)
+                table.insert(polygon, point.x)
+                table.insert(polygon, point.y)
             end
         until knownPoint
 
@@ -205,12 +238,7 @@ function maps.loadMap(mapPath)
     local polygons = buildMap(mapPath)
 
     for _, poly in ipairs(polygons) do
-        local points = {}
-        for _, p in ipairs(poly) do
-            table.insert(points, p.x)
-            table.insert(points, p.y)
-        end
-        Platform(points)
+        Platform(poly)
     end
 end
 

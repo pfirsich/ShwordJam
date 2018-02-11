@@ -15,12 +15,13 @@ local function modified(path)
 end
 
 function reloadConstants(root, dontSetup)
+    root = root or ""
     local suffix = ".constants.lua"
-    for _, item in ipairs(lf.getDirectoryItems("")) do
+    for _, item in ipairs(lf.getDirectoryItems(root)) do
         local path = (root or "") .. "/" .. item
         if lf.isFile(path) then
             if item:sub(-suffix:len()) == suffix and modified(path) then
-                local c = utils.loveDoFile(item)
+                local c = utils.loveDoFile(path)
                 utils.table.updateTable(const, c)
             end
         elseif lf.isDirectory(path) then

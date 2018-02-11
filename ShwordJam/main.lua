@@ -29,7 +29,7 @@ function love.update()
 end
 
 function love.draw()
-
+    getCurrentScene().draw()
 end
 
 function love.run()

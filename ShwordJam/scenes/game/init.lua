@@ -17,7 +17,10 @@ function scene.tick()
 end
 
 function scene.draw()
+    lg.push()
+    lg.scale(25)
     GameObject.drawAll()
+    lg.pop()
 end
 
 return scene
