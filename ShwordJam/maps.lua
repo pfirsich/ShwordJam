@@ -14,8 +14,6 @@ local tileCharTypeMap = {
     ["s"] = tileTypes.SPAWN_POINT,
 }
 
-local whatever = utils.table.inverseTable(tileCharTypeMap)
-
 local function lines(s)
     if s:sub(-1) ~= "\n" then
          s = s .. "\n"
@@ -59,13 +57,6 @@ local function loadMapsFile(mapPath)
     return tileMap, properties
 end
 
-local function coordTable(x, y)
-    return {
-        x = x,
-        y = y,
-    }
-end
-
 local function at(t, y, x)
     return t[y] and t[y][x]
 end
@@ -98,8 +89,7 @@ local marchingRoute = {
     [15] = 'error',
 }
 
-local function buildMap(mapPath)
-    local tileMap, properties = loadMapsFile(mapPath)
+local function buildChunks(tileMap)
     local markedMap = {}
     local chunks = {}
 
@@ -140,7 +130,10 @@ local function buildMap(mapPath)
         end
     end
 
-    -- Print chunks for debugging
+    return chunks
+end
+
+local function printChunks(chunks, tileMap)
     local debugMap = {}
     for y = 1, #tileMap do
         debugMap[y] = {}
@@ -163,7 +156,9 @@ local function buildMap(mapPath)
         end
         io.write("\n")
     end
+end
 
+local function buildPolygons(chunks)
     local polygons = {}
 
     for _, chunk in ipairs(chunks) do
@@ -236,7 +231,13 @@ local function buildMap(mapPath)
 end
 
 function maps.loadMap(mapPath)
-    local polygons = buildMap(mapPath)
+    local tileMap, properties = loadMapsFile(mapPath)
+    local chunks = buildChunks(tileMap)
+
+    -- For debugging
+    printChunks(chunks, tileMap)
+
+    local polygons = buildPolygons(chunks)
 
     for _, poly in ipairs(polygons) do
         Platform(poly)
