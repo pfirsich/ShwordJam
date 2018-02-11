@@ -10,6 +10,7 @@ function Player:initialize(controller)
     self.controller = controller
     self.position = {0, 0}
     self.velocity = {0, 0}
+    self.shape = GameObject.collider:rectangle(0, 0, const.player.width, const.player.height)
     self.time = 0
 end
 
@@ -31,6 +32,10 @@ function Player:update()
 
     -- integrate
     self.position = vmath.add(self.position, vmath.mul(self.position, const.SIM_DT))
+end
+
+function Player:updateCollisions()
+
 end
 
 function Player:draw()
