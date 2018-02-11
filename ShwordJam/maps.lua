@@ -18,7 +18,7 @@ local function lines(s)
     if s:sub(-1) ~= "\n" then
          s = s .. "\n"
      end
-    return s:gmatch("(.-)\n")
+    return s:gmatch("(.-)\r?\n")
 end
 
 local function loadMapsFile(mapPath)
