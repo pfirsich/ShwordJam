@@ -1,9 +1,11 @@
 local utils = require("utils")
-local GameObject = require("GameObject")
+local GameObject = require("gameobject")
 
 Platform = utils.class("Platform", GameObject)
 
 function Platform:initialize(points, texture)
+    print(utils.inspect(points))
+
     GameObject.initialize(self)
     local triangles = love.math.triangulate(points)
     local vertices = {}
@@ -32,7 +34,7 @@ function Platform:update()
 end
 
 function Platform:draw()
-    lg.draw(mesh)
+    lg.draw(self.mesh)
 end
 
 return Platform
