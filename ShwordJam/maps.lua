@@ -23,7 +23,7 @@ local function lines(s)
     return s:gmatch("(.-)\n")
 end
 
-local function loadFile(mapPath)
+local function loadMapsFile(mapPath)
     local contents, sizeOrError = love.filesystem.read("media/maps/" .. mapPath .. ".lvl")
 
     if not contents then
@@ -99,29 +99,29 @@ local marchingRoute = {
 }
 
 local function buildMap(mapPath)
-    local tileMap, properties = loadFile(mapPath)
+    local tileMap, properties = loadMapsFile(mapPath)
     local markedMap = {}
-    local groups = {}
+    local chunks = {}
 
-    local function findGroup(x, y)
+    local function findChunk(x, y)
         local tileType = at(tileMap, y, x)
 
         if tileType and tileType ~= tileTypes.EMPTY and not at(markedMap, y, x) then
-            local group = {}
+            local chunk = {}
 
-            table.insert(group, {
+            table.insert(chunk, {
                 x = x,
                 y = y,
                 type = tileType,
             })
             markedMap[y][x] = true
 
-            utils.table.extend(group, findGroup(x - 1, y))
-            utils.table.extend(group, findGroup(x + 1, y))
-            utils.table.extend(group, findGroup(x, y - 1))
-            utils.table.extend(group, findGroup(x, y + 1))
+            utils.table.extend(chunk, findChunk(x - 1, y))
+            utils.table.extend(chunk, findChunk(x + 1, y))
+            utils.table.extend(chunk, findChunk(x, y - 1))
+            utils.table.extend(chunk, findChunk(x, y + 1))
 
-            return group
+            return chunk
         else
             return nil
         end
@@ -136,10 +136,11 @@ local function buildMap(mapPath)
 
     for y, row in ipairs(tileMap) do
         for x, tileType in ipairs(row) do
-            table.insert(groups, findGroup(x, y))
+            table.insert(chunks, findChunk(x, y))
         end
     end
 
+    -- Print chunks for debugging
     local debugMap = {}
     for y = 1, #tileMap do
         debugMap[y] = {}
@@ -149,8 +150,8 @@ local function buildMap(mapPath)
     end
 
     local c = string.byte("A")
-    for _, group in ipairs(groups) do
-        for _, tile in ipairs(group) do
+    for _, chunk in ipairs(chunks) do
+        for _, tile in ipairs(chunk) do
             debugMap[tile.y][tile.x] = string.char(c)
         end
         c = c + 1
@@ -165,7 +166,7 @@ local function buildMap(mapPath)
 
     local polygons = {}
 
-    for _, group in ipairs(groups) do
+    for _, chunk in ipairs(chunks) do
         local polygon = {}
         repeat
             local point = nil
@@ -174,10 +175,10 @@ local function buildMap(mapPath)
             local y
 
             if #polygon == 0 then
-                table.insert(polygon, group[1].x)
-                table.insert(polygon, group[1].y)
-                x = group[1].x
-                y = group[1].y
+                table.insert(polygon, chunk[1].x)
+                table.insert(polygon, chunk[1].y)
+                x = chunk[1].x
+                y = chunk[1].y
             else
                 x = polygon[#polygon-1]
                 y = polygon[#polygon-0]
@@ -185,16 +186,16 @@ local function buildMap(mapPath)
 
             local neighborsHash = 0
 
-            if coordInList(group, x, y - 1) then
+            if coordInList(chunk, x, y - 1) then
                 neighborsHash = neighborsHash + 1
             end
-            if coordInList(group, x - 1, y - 1) then
+            if coordInList(chunk, x - 1, y - 1) then
                 neighborsHash = neighborsHash + 2
             end
-            if coordInList(group, x, y) then
+            if coordInList(chunk, x, y) then
                 neighborsHash = neighborsHash + 4
             end
-            if coordInList(group, x - 1, y) then
+            if coordInList(chunk, x - 1, y) then
                 neighborsHash = neighborsHash + 8
             end
 
@@ -213,7 +214,7 @@ local function buildMap(mapPath)
             elseif whatToDo == 'left' then
                 point = {x = x - 1, y = y}
             else
-                error("Invalid whatToDo " .. whatToDo)
+                error("Invalid " .. whatToDo)
             end
 
             local knownPoint = false
