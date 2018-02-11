@@ -5,7 +5,7 @@ Platform = utils.class("Platform", GameObject)
 
 function Platform:initialize(points, texture)
     GameObject.initialize(self)
-    local triangles = love.math.triangulate(points)
+    local triangles = lm.triangulate(points)
     local vertices = {}
     local textureScale = 0.1
     for t = 1, #triangles do
@@ -24,7 +24,9 @@ function Platform:initialize(points, texture)
         self.mesh:setTexture(texture)
     end
 
+    self.color = {lm.random(100, 255), lm.random(100, 255), lm.random(100, 255)}
     self.shape = GameObject.collider:polygon(unpack(points))
+    self.shape._object = self
 end
 
 function Platform:update()
@@ -32,7 +34,7 @@ function Platform:update()
 end
 
 function Platform:draw()
-    lg.setColor(255, 255, 255)
+    lg.setColor(self.color)
     lg.draw(self.mesh)
 end
 

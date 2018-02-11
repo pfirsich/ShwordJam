@@ -1,5 +1,6 @@
 lg = love.graphics
 lf = love.filesystem
+lm = love.math
 
 require("libs.HC")
 
