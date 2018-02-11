@@ -16,6 +16,10 @@ function utils.loveDoFile(path)
     end
 end
 
+function utils.nop()
+    -- pass
+end
+
 for _, item in ipairs(lf.getDirectoryItems("utils")) do
     local path = "scenes/" .. item
     if item ~= "init.lua" then

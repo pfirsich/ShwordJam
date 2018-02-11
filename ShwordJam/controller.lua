@@ -80,6 +80,22 @@ local function gamepadAxis(joystick, axis)
     end
 end
 
+local function _binaryDummy()
+    return false
+end
+
+local function binaryDummy()
+    return _binaryDummy
+end
+
+local function _analogDummy()
+    return 0
+end
+
+local function analogDummy()
+    return _analogDummy
+end
+
 ----
 
 local function gamepadController(joystick)
@@ -95,4 +111,14 @@ local function gamepadController(joystick)
     return ctrl
 end
 
-return gamepadController
+local function dummyController()
+    local ctrl = Controller()
+    for _, slot in ipairs(analogSlots) do
+        ctrl:bind(slot, analogDummy())
+    end
+    for _, slot in ipairs(binarySlots) do
+        ctrl:bind(slot, binaryDummy)
+    end
+end
+
+return gamepadController, dummyController

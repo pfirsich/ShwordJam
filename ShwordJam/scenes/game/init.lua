@@ -2,14 +2,22 @@ local maps = require("maps")
 local GameObject = require("gameobject")
 local Platform = require("gameobject.platform")
 local Player = require("gameobject.player")
-local gamepadController = require("controller")
+local gamepadController, dummyController = require("controller")
 
 local scene = {name = "game"}
 
 function scene.enter(mapPath)
     GameObject.resetWorld()
     maps.loadMap(mapPath)
-    Player(gamepadController(love.joystick.getJoysticks()[1]))
+
+    local joysticks = love.joystick.getJoysticks()
+    local controller = nil
+    if #joysticks > 0 then
+        controller = gamepadController(joysticks[1])
+    else
+        controller = dummyController()
+    end
+    Player(controller)
 end
 
 function scene.tick()
