@@ -10,9 +10,11 @@ local scene = {name = "game"}
 
 local player
 
-function scene.enter(mapPath)
+function scene.enter(mapFileName)
     GameObject.resetWorld()
-    maps.loadMap(mapPath)
+    local map = maps.loadMapFile(mapFileName)
+
+    maps.loadMap(unpack(map))
 
     local joysticks = love.joystick.getJoysticks()
     local controller = nil

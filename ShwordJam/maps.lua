@@ -23,42 +23,6 @@ local function lines(s)
     return s:gmatch("(.-)\r?\n")
 end
 
-local function loadMapsFile(mapPath)
-    local contents, sizeOrError = love.filesystem.read("media/maps/" .. mapPath .. ".lvl")
-
-    if not contents then
-        error(sizeOrError)
-    end
-
-    local properties = {}
-    local tileMap = {}
-    local parseProperties = true
-
-    local y = 1
-    for line in lines(contents) do
-        if line == "" then
-            parseProperties = false
-        else
-            if parseProperties then
-                local key, value = line:match("(.-)%s*:%s*(.*)")
-                if key then
-                    properties[key] = value
-                end
-            else
-                tileMap[y] = {}
-                for x = 1, line:len() do
-                    local char = line:sub(x, x)
-                    local type = tileCharTypeMap[char]
-                    tileMap[y][x] = type
-                end
-
-                y = y + 1
-            end
-        end
-    end
-    return tileMap, properties
-end
-
 local function at(t, y, x)
     return t[y] and t[y][x]
 end
@@ -232,8 +196,52 @@ local function buildPolygons(chunks)
     return polygons
 end
 
-function maps.loadMap(mapPath)
-    local tileMap, properties = loadMapsFile(mapPath)
+function maps.loadMapFile(mapFileName)
+    local contents, sizeOrError = love.filesystem.read("media/maps/" .. mapFileName .. ".lvl")
+
+    if not contents then
+        error(sizeOrError)
+    end
+
+    local properties = {}
+    local tileMap = {}
+    local parseProperties = true
+
+    local y = 1
+    local fistLineLength = nil
+    for line in lines(contents) do
+        if line == "" then
+            parseProperties = false
+        else
+            if parseProperties then
+                local key, value = line:match("(.-)%s*:%s*(.*)")
+                if key then
+                    properties[key] = value
+                end
+            else
+                tileMap[y] = {}
+                local len = line:len()
+                if not fistLineLength then
+                    fistLineLength = len
+                elseif fistLineLength ~= len then
+                    error(("Line %d has irregular length"):format(y))
+                end
+                for x = 1, len do
+                    local char = line:sub(x, x)
+                    local type = tileCharTypeMap[char]
+                    tileMap[y][x] = type
+                end
+
+                y = y + 1
+            end
+        end
+    end
+
+    local size = { #tileMap, #tileMap[1] }
+    return {tileMap, properties, size}
+end
+
+function maps.loadMap(tileMap, properties)
     local chunks = buildChunks(tileMap)
 
     -- For debugging
