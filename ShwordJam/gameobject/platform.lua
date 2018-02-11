@@ -32,6 +32,7 @@ function Platform:update()
 end
 
 function Platform:draw()
+    lg.setColor(255, 255, 255)
     lg.draw(self.mesh)
 end
 

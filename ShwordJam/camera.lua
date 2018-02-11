@@ -1,3 +1,5 @@
+local const = require("constants")
+
 local camera = {
     position = {0, 0},
     scale = 1,
@@ -115,7 +117,7 @@ function camera.focusPoints(points)
 end
 
 function camera.shakeFunction()
-    local t = (love.timer.getTime() * cfg.screenShakeFreq) % 10.0
+    local t = (love.timer.getTime() * const.screenShakeFreq) % 10.0
     local offset = 0.5
     local x, y = love.math.noise(t) * 2.0 - 1.0, love.math.noise(t+offset) * 2.0 - 1.0
     return x, y
@@ -126,3 +128,5 @@ function camera.getAABB()
     local tlX, tlY = camera.screenToWorld(0, 0)
     local brX, brY = camera.screenToWorld(love.graphics.getDimensions())
 end
+
+return camera

@@ -61,7 +61,7 @@ function Controller:bind(slot, getState)
 end
 
 function Controller:update()
-    for _, slot in ipairs(slots) do
+    for _, slot in ipairs(allSlots) do
         self[slot]:update()
     end
 end

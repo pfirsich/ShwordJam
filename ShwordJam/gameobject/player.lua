@@ -3,7 +3,6 @@ local utils = require("utils")
 local vmath = require("utils.vmath")
 local GameObject = require("gameobject")
 
-
 Player = class("Player", GameObject)
 
 function Player:initialize(controller)
@@ -11,9 +10,26 @@ function Player:initialize(controller)
     self.controller = controller
     self.position = {0, 0}
     self.velocity = {0, 0}
+    self.time = 0
 end
 
 function Player:update()
+    local pconst = const.player
+
+    self.controller:update()
+    self.moveDir = {self.controller.moveX.state, self.controller.moveY.state}
+    if vmath.len(self.moveDir) < pconst.moveDeadzone then
+        self.moveDir = {0, 0}
+    end
+
+    self.time = self.time + const.SIM_DT
+
+    self.position = vmath.add(self.position, vmath.mul({self.moveDir[1], self.moveDir[2]}, pconst.maxMoveSpeed))
+    --self.state:update()
+
+    --self:updateCollisions()
+
+    -- integrate
     self.position = vmath.add(self.position, vmath.mul(self.position, const.SIM_DT))
 end
 
