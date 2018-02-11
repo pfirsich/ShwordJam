@@ -1,5 +1,7 @@
 lg = love.graphics
 lf = love.filesystem
+lm = love.math
+lk = love.keyboard
 
 require("libs.HC")
 
@@ -55,7 +57,7 @@ end
 
 function love.load()
     requireScenes()
-    reloadConstants()
+    const.reload()
 
     -- load scenes
     for name, scene in pairs(scenes) do
@@ -74,6 +76,13 @@ end
 
 function love.draw()
     getCurrentScene().draw()
+end
+
+function love.keypressed(key)
+    local ctrl = lk.isDown("lctrl") or lk.isDown("rctrl")
+    if ctrl and key == "r" then
+        const.reload()
+    end
 end
 
 function love.run()
@@ -105,6 +114,7 @@ function love.run()
                         end
                     end
 
+                    love.handlers[name](a, b, c, d, e, f)
                     utils.callNonNil(scene[name], a, b, c, d, e, f)
                 end
             end
@@ -124,6 +134,7 @@ function love.run()
             lg.clear(lg.getBackgroundColor())
             lg.origin()
             love.draw(dt)
+            lg.print(love.timer.getFPS(), 5, 5)
             lg.present()
         end
 

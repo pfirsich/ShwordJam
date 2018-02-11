@@ -50,7 +50,7 @@ function camera.clampToBounds(x, y, w, h)
     local wW, wH = love.graphics.getDimensions()
 
     -- don't zoom out too much, if bounds are too close to each other
-    camera.scaleMin = math.max(camera.scaleMin, wW / camera.bounds[3])
+    camera.scaleMin = math.max(camera.scaleMin, wW / w)
 
     if camera.scaleMin then camera.scale = math.max(camera.scale, camera.scaleMin) end
     if camera.scaleMax then camera.scale = math.min(camera.scale, camera.scaleMax) end

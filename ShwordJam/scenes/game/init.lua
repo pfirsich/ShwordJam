@@ -23,21 +23,22 @@ function scene.enter(mapFileName)
     else
         controller = dummyController()
     end
-    player = Player(controller)
+    player = Player(controller, map.spawnPoints[1])
 end
 
 function scene.tick()
     GameObject.updateAll()
     camera.target.position = vmath.copy(player.position)
+    camera.position = camera.target.position
+    camera.scale = 50
 end
 
 function scene.draw()
     camera.push()
-    lg.push()
-        lg.scale(25)
-        GameObject.drawAll()
-    lg.pop()
+    GameObject.drawAll()
     camera.pop()
+
+    GameObject.callAll("drawHUD")
 end
 
 return scene
