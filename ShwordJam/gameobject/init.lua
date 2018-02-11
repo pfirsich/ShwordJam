@@ -14,14 +14,14 @@ end
 
 function GameObject.updateAll()
     for _, object in ipairs(GameObject.world) do
-        object.update()
+        object:update()
     end
     table.sort(GameObject.world, gameObjectCmp)
 end
 
 function GameObject.drawAll()
     for _, object in ipairs(GameObject.world) do
-        object.draw()
+        object:draw()
     end
 end
 
