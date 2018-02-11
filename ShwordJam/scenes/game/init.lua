@@ -3,7 +3,7 @@ local GameObject = require("gameobject")
 local Platform = require("gameobject.platform")
 local Player = require("gameobject.player")
 local vmath = require("utils.vmath")
-local gamepadController, dummyController = require("controller")
+local gamepadController, dummyController = unpack(require("controller"))
 local camera = require("camera")
 
 local scene = {name = "game"}
