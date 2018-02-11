@@ -241,8 +241,8 @@ function maps.loadMap(mapPath)
 
     local polygons = buildPolygons(chunks)
 
-    for _, poly in ipairs(polygons) do
-        Platform(poly)
+    for _, polygon in ipairs(polygons) do
+        Platform(polygon)
     end
 end
 
