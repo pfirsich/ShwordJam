@@ -1,7 +1,8 @@
 local utils = require("utils")
+local class = require("libs.class")
 local GameObject = require("gameobject")
 
-Platform = utils.class("Platform", GameObject)
+Platform = class("Platform", GameObject)
 
 function Platform:initialize(points, texture)
     GameObject.initialize(self)
@@ -36,6 +37,8 @@ end
 function Platform:draw()
     lg.setColor(self.color)
     lg.draw(self.mesh)
+    lg.setColor(0, 255, 0)
+    self.shape:draw("fill")
 end
 
 return Platform

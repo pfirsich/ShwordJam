@@ -1,7 +1,8 @@
 local utils = require("utils")
+local class = require("libs.class")
 local HC = require("libs.HC")
 
-local GameObject = utils.class("GameObject")
+local GameObject = class("GameObject")
 
 function GameObject.resetWorld()
     GameObject.world = {}
@@ -22,6 +23,14 @@ end
 function GameObject.drawAll()
     for _, object in ipairs(GameObject.world) do
         object:draw()
+    end
+end
+
+function GameObject.callAll(name, ...)
+    for _, object in ipairs(GameObject.world) do
+        if object[name] then
+            object[name](object, ...)
+        end
     end
 end
 

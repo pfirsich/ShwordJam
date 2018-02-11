@@ -1,4 +1,6 @@
 local const = require("constants")
+local class = require("libs.class")
+
 local states = require("gameobject.player.states.states")
 
 local Dash = class("Dash", states.Base)

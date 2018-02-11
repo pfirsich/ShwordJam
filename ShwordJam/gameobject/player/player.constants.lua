@@ -7,12 +7,12 @@ return {
 
         groundProbeOffsetY = 0.01,
 
-        maxMoveSpeed = 3.0, -- units/sec
-        dashSpeedFactor = 0.8,
+        maxMoveSpeed = 6.0, -- units/sec
+        dashSpeedFactor = 0.9,
         runStartFactor = 0.5,
-        acceleration = 3.0,
-        friction = 5.0, -- units/sec/sec
-        maxFallSpeed = 3.5,
+        acceleration = 6.0,
+        friction = 10.0, -- units/sec/sec
+        maxFallSpeed = 6.0,
         gravity = 10.0,
         fastFallFactor = 1.5,
 

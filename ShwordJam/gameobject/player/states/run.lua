@@ -1,5 +1,6 @@
 local utils = require("utils")
 local const = require("constants")
+local class = require("libs.class")
 
 local states = require("gameobject.player.states.states")
 

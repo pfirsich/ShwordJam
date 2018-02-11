@@ -88,14 +88,12 @@ function Player:update()
     self.time = self.time + const.SIM_DT
     self.frameCounter = self.frameCounter + 1
 
-    self:move(vmath.mul({self.moveDir[1], self.moveDir[2]},
-            pconst.maxMoveSpeed * const.SIM_DT))
     self.state:update()
 
-    self:updateCollisions()
-
     -- integrate
-    self.position = vmath.add(self.position, vmath.mul(self.velocity, const.SIM_DT))
+    self:move(vmath.mul(self.velocity, const.SIM_DT))
+
+    self:updateCollisions()
 end
 
 function Player:updateCollisions()
@@ -112,6 +110,13 @@ function Player:draw()
     lg.setColor(0, 0, 255)
     local x, y, w, h = self.position[1], self.position[2], pconst.width, pconst.height
     lg.rectangle("fill", x - w/2, y - h/2, w, h)
+    lg.setColor(255, 0, 0)
+    self.shape:draw("fill")
+    lg.setColor(255, 255, 255)
+end
+
+function Player:hudDraw()
+    lg.print(utils.inspect({position = self.position, velocity = self.velocity, state = self.state:tostring()}), 5, 5)
 end
 
 return Player

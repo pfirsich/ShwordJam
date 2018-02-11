@@ -1,3 +1,5 @@
+local class = require("libs.class")
+
 local PlayerState = class("PlayerState")
 
 function PlayerState:initialize(player)

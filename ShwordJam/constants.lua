@@ -14,7 +14,7 @@ local function modified(path)
     return not lastModified[path] or lastModified[path] < mod
 end
 
-function reloadConstants(root, dontSetup)
+function const.reload(root, dontSetup)
     root = root or ""
     local suffix = ".constants.lua"
     for _, item in ipairs(lf.getDirectoryItems(root)) do
@@ -25,7 +25,7 @@ function reloadConstants(root, dontSetup)
                 utils.table.updateTable(const, c)
             end
         elseif lf.isDirectory(path) then
-            reloadConstants(path, true)
+            const.reload(path, true)
         end
     end
 

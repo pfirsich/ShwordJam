@@ -1,6 +1,7 @@
 local utils = require("utils")
+local class = require("libs.class")
 
-local Control = utils.class("Control")
+local Control = class("Control")
 
 local binaryGamepadInputs = {
     "a", "b", "x", "y", "back", "guide", "start",
@@ -47,7 +48,7 @@ local binarySlots =  {
 
 local allSlots = utils.table.mergeLists(analogSlots, binarySlots)
 
-local Controller = utils.class("Controller")
+local Controller = class("Controller")
 
 function Controller:initialize()
 
