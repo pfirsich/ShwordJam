@@ -4,7 +4,7 @@ local vmath = require("utils.vmath")
 local GameObject = require("gameobject")
 local class = require("libs.class")
 
-Player = class("Player", GameObject)
+local Player = class("Player", GameObject)
 
 function Player:initialize(controller)
     GameObject.initialize(self)
