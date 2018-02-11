@@ -117,8 +117,8 @@ local function dummyController()
         ctrl:bind(slot, analogDummy())
     end
     for _, slot in ipairs(binarySlots) do
-        ctrl:bind(slot, binaryDummy)
+        ctrl:bind(slot, binaryDummy())
     end
 end
 
-return gamepadController, dummyController
+return {gamepadController, dummyController}

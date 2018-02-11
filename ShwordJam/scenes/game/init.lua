@@ -2,7 +2,7 @@ local maps = require("maps")
 local GameObject = require("gameobject")
 local Platform = require("gameobject.platform")
 local Player = require("gameobject.player")
-local gamepadController, dummyController = require("controller")
+local gamepadController, dummyController = unpack(require("controller"))
 
 local scene = {name = "game"}
 
