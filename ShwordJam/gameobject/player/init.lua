@@ -1,3 +1,4 @@
+local class = require("libs.class")
 local const = require("constants")
 local utils = require("utils")
 local vmath = require("utils.vmath")
@@ -8,7 +9,7 @@ local HCshapes = require("libs.HC.shapes")
 
 local inspect = utils.inspect
 
-Player = class("Player", GameObject)
+local Player = class("Player", GameObject)
 
 function Player:initialize(controller, spawnPosition)
     GameObject.initialize(self)

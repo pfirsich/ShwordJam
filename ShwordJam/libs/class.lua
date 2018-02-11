@@ -5,7 +5,7 @@ local function class_call(c, ...)
     return self
 end
 
-function class(name, base)
+local function class(name, base)
     local cls = {}
     cls.__index = cls
     cls.name = name
