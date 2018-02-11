@@ -15,7 +15,7 @@ function Player:initialize(controller)
 end
 
 function Player:update()
-    self.position = vadd(self.position, vmul(self.position, const.SIM_DT))
+    self.position = vmath.add(self.position, vmath.mul(self.position, const.SIM_DT))
 end
 
 function Player:draw()

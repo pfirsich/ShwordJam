@@ -1,7 +1,7 @@
 local function class_call(c, ...)
     local self = setmetatable({}, c)
     self.class = c
-    if self.init then self:initialize(...) end
+    if self.initialize then self:initialize(...) end
     return self
 end
 
