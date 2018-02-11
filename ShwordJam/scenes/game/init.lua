@@ -14,7 +14,7 @@ function scene.enter(mapFileName)
     GameObject.resetWorld()
     local map = maps.loadMapFile(mapFileName)
 
-    maps.loadMap(unpack(map))
+    maps.loadMap(map.tileMap)
 
     local joysticks = love.joystick.getJoysticks()
     local controller = nil

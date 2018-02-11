@@ -206,6 +206,7 @@ function maps.loadMapFile(mapFileName)
     local properties = {}
     local tileMap = {}
     local parseProperties = true
+    local spawnPoints = {}
 
     local y = 1
     local fistLineLength = nil
@@ -229,7 +230,13 @@ function maps.loadMapFile(mapFileName)
                 for x = 1, len do
                     local char = line:sub(x, x)
                     local type = tileCharTypeMap[char]
-                    tileMap[y][x] = type
+
+                    if type == tileTypes.SPAWN_POINT then
+                        table.insert(spawnPoints, {x, y})
+                        tileMap[y][x] = tileTypes.EMPTY
+                    else
+                        tileMap[y][x] = type
+                    end
                 end
 
                 y = y + 1
@@ -238,10 +245,15 @@ function maps.loadMapFile(mapFileName)
     end
 
     local size = { #tileMap, #tileMap[1] }
-    return {tileMap, properties, size}
+    return {
+        tileMap = tileMap,
+        properties = properties,
+        size = size,
+        spawnPoints = spawnPoints
+    }
 end
 
-function maps.loadMap(tileMap, properties)
+function maps.loadMap(tileMap)
     local chunks = buildChunks(tileMap)
 
     -- For debugging
