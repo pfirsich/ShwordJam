@@ -2,6 +2,7 @@ local const = require("constants")
 local utils = require("utils")
 local vmath = require("utils.vmath")
 local GameObject = require("gameobject")
+local class = require("libs.class")
 
 Player = class("Player", GameObject)
 
