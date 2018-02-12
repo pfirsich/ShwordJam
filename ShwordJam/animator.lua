@@ -33,8 +33,13 @@ function Animator.load(path, animator)
     -- if modified(path) is called the first time for path, it returns true
     if modified(path) then
         for key, value in pairs(utils.loveDoFile(path)) do
-            local animaton = Animation(value.keyFrames, value.speed, value.loop)
-            animFile.animations[key] = animaton
+            local animation = Animation(value.keyFrames)
+            animFile.animations[key] = {
+                animation = animation,
+                speed = value.speed,
+                loop = value.loop,
+                loopPoint = value.loopPoint,
+            }
         end
 
         -- pairs, because .animators is a weak-valued table!
@@ -66,8 +71,27 @@ end
 
 function Animator:update(dt)
     if self.current then
-        self.time = self.time + dt * self.speedMultiplier
-        self.animations[self.current]:apply(self.target, self.time)
+        local current = self.animations[self.current]
+        local anim = current.animation
+        local speed = current.speed
+        local loop = current.loop
+        local loopPoint = current.loopPoint
+
+        self.time = self.time + dt * speed * self.speedMultiplier
+        local length = anim:length()
+
+
+        if loop then
+            if self.time > length then
+                if loopPoint then
+                    self.time = loopPoint + self.time % length
+                else
+                    self.time = self.time % length
+                end
+            end
+        end
+
+        anim:apply(self.target, self.time)
     end
 end
 
