@@ -10,6 +10,7 @@ require("libs.strict")
 local scenes = require("scenes")
 local utils = require("utils")
 local const = require("constants")
+local fonts = require("fonts")
 local Animator = require("animator")
 
 function love.load(args)
@@ -100,7 +101,11 @@ function love.run()
             lg.clear(lg.getBackgroundColor())
             lg.origin()
             love.draw(dt)
+
+            lg.setColor(20, 20, 20)
+            lg.setFont(fonts.big)
             lg.print(love.timer.getFPS(), 5, 5)
+
             lg.present()
         end
 

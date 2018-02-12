@@ -205,7 +205,7 @@ end
 function Player:postHudDraw()
     utils.callNonNil(self.state.postHudDraw, self.state)
 
-    lg.setColor(0, 255, 0)
+    lg.setColor(20, 20, 20)
     lg.setFont(fonts.big)
     lg.print(utils.inspect({
         position = self.position,

@@ -8,11 +8,13 @@ local scene = {name = "server"}
 
 local server;
 
+local map
+
 function scene.enter(mapFileName)
     server = Server("49648")
 
     GameObject.resetWorld()
-    local map = maps.loadMapFile(mapFileName)
+    map = maps.loadMapFile(mapFileName)
 
     maps.loadMap(map.tileMap)
 
@@ -33,11 +35,17 @@ function scene.tick()
 end
 
 function scene.draw(dt)
+    if map.properties.background then
+        lg.setBackgroundColor(map.properties.background:match("(%d+)%s*,%s*(%d+)%s*,%s*(%d+)"))
+    end
+
+    GameObject.callAll("preHudDraw")
+
     camera.push()
     GameObject.drawAll(dt)
     camera.pop()
 
-    GameObject.callAll("hudDraw")
+    GameObject.callAll("postHudDraw")
 end
 
 function scene.exit()

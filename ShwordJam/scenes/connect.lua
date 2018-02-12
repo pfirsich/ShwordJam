@@ -1,4 +1,5 @@
 local utils = require("utils")
+local fonts = require("fonts")
 local scenes = require("scenes")
 local Client = require("net.client")
 
@@ -23,9 +24,13 @@ function scene.tick()
 end
 
 function scene.draw()
+    lg.setBackgroundColor(240, 240, 240)
+
+    lg.setColor(20, 20, 20)
+    lg.setFont(fonts.big)
     lg.print("Connecting...", 80, 80)
 end
--- 
+--
 -- function scene.exit()
 --     client:close()
 -- end

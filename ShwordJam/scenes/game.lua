@@ -32,7 +32,6 @@ function scene.enter(mapFileName, _client)
         controller = dummyController()
     end
     player = Player(controller, map.spawnPoints[1])
-
 end
 
 function scene.tick()
@@ -43,10 +42,6 @@ function scene.tick()
     end
 
     GameObject.updateAll()
-
-    if map.properties.background then
-        lg.setBackgroundColor(map.properties.background:match("(%d+)%s*,%s*(%d+)%s*,%s*(%d+)"))
-    end
 
     camera.target.position = vmath.copy(player.position)
     camera.position = camera.target.position
@@ -66,6 +61,10 @@ function scene.tick()
 end
 
 function scene.draw(dt)
+    if map.properties.background then
+        lg.setBackgroundColor(map.properties.background:match("(%d+)%s*,%s*(%d+)%s*,%s*(%d+)"))
+    end
+
     GameObject.callAll("preHudDraw")
 
     camera.push()
