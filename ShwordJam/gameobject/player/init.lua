@@ -7,6 +7,7 @@ local GameObject = require("gameobject")
 local Platform = require("gameobject.platform")
 local states = require("gameobject.player.states")
 local HCshapes = require("libs.HC.shapes")
+local fonts = require("fonts")
 
 local inspect = utils.inspect
 
@@ -33,7 +34,8 @@ function Player:initialize(controller, spawnPosition)
 
     self:setState(states.Wait)
 
-    self._groundProbe = HCshapes.newPointShape(0, 0)
+    local w, h = const.player.width * const.player.groundProbeWidthFactor, const.player.groundProbeHeight
+    self._groundProbe = HCshapes.newPolygonShape(0, 0,  w, 0,  w, h,  0, h)
 end
 
 function Player:setState(stateClass, ...)
@@ -69,7 +71,9 @@ end
 
 function Player:onGround()
     self._groundProbe:moveTo(self.position[1],
-        self.position[2] + const.player.height/2 + const.player.groundProbeOffsetY)
+        self.position[2] + const.player.height/2 +
+        const.player.groundProbeHeight * 0.5 +
+        const.player.groundProbeOffsetY)
     local collisions = GameObject.collider:collisions(self._groundProbe)
     for other, mtv in pairs(collisions) do
         if other._object.class == Platform then
@@ -94,6 +98,8 @@ function Player:update()
     self.moveDir = {self.controller.moveX.state, self.controller.moveY.state}
     if vmath.len(self.moveDir) < pconst.moveDeadzone then
         self.moveDir = {0, 0}
+    else
+        self.moveDir = vmath.mul(self.moveDir, vmath.len(self.moveDir) / (1 - const.player.moveDeadzone))
     end
 
     self.time = self.time + const.SIM_DT
@@ -144,12 +150,14 @@ function Player:draw(dt)
 end
 
 function Player:hudDraw()
-    lg.setColor(255, 255, 255)
+    lg.setColor(0, 255, 0)
+    lg.setFont(fonts.big)
     lg.print(utils.inspect({
         position = self.position,
         velocity = self.velocity,
-        state = self.state:tostring()
-    }), 5, 25)
+        onGround = self:onGround(),
+    }), 5, 30)
+    lg.print(self.state:tostring(), 5, 200)
 end
 
 return Player
