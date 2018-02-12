@@ -9,7 +9,7 @@ local scene = {name = "server"}
 local server;
 
 function scene.enter(mapFileName)
-    server = Server("5349")
+    server = Server("49648")
 
     GameObject.resetWorld()
     local map = maps.loadMapFile(mapFileName)
@@ -29,7 +29,7 @@ function scene.tick()
 
     GameObject.updateAll()
 
-    -- server:broadcastUpdate()
+    server:broadcastUpdate()
 end
 
 function scene.draw(dt)

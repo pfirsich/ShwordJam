@@ -148,7 +148,6 @@ function Player:draw(dt)
         lg.scale(self.flipped and -1 or 1, 1)
         lg.translate(0, pconst.height * (1 - p.scaleY) / 2)
         lg.rotate(p.angle)
-        -- lg.scale(p.scaleX, p.scaleY)
         local w, h = pconst.width * p.scaleX, pconst.height * p.scaleY
         lg.rectangle("fill", -w/2, -h/2, w, h)
 

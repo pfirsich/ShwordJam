@@ -10,15 +10,15 @@ local Server = class("Server")
 
 
 function Server:initialize(port)
-    print("host")
-    self.host = enet.host_create("0.0.0.0:" .. port)
+    self.host = enet.host_create("*:" .. port)
     if not self.host then
         error("Can't create host")
     end
 end
 
 function Server:handlePackage(type, data)
-    print("got", type)
+    print("handle", type, data)
+
     if type == "update" then
         for _, object in ipairs(data.updates) do
             -- update world
@@ -27,19 +27,15 @@ function Server:handlePackage(type, data)
 end
 
 function Server:processPackage(eventData)
-    local package = pm.unpack(eventData)
-    self:handleEvent(package.type, package.data)
+    local package = mp.unpack(eventData)
+    self:handlePackage(package.type, package.data)
 end
 
 function Server:receive()
     local event = self.host:service()
-    if event then
-        print("event", event)
-    end
 
     while event do
         if event.type == "receive" then
-            print("Got message: ", event.data, event.peer)
             self:processPackage(event.data)
         elseif event.type == "connect" then
             print("Client connected", event.peer)
@@ -80,7 +76,6 @@ function Server:broadcastUpdate()
 end
 
 function Server:close()
-    print("fdgs")
     for i = 1, self.host:peer_count() do
         local peer = self.host:get_peer(i)
         if peer:state() == "connected" then

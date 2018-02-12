@@ -33,12 +33,13 @@ function scene.enter(mapFileName, _client)
         controller = dummyController()
     end
     player = Player(controller, map.spawnPoints[1])
+
 end
 
 function scene.tick()
     local error = client:receive()
     if error then
-        enterScene(scenes.message, error)
+        enterScene(scenes.message, "Error: " .. error)
         return
     end
 
@@ -56,7 +57,7 @@ function scene.tick()
 
     local error = client:sendUpdate()
     if error then
-        enterScene(scenes.message, error)
+        enterScene(scenes.message, "Error: " .. error)
         return
     end
 end

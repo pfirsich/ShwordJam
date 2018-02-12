@@ -10,7 +10,7 @@ local client
 
 function scene.enter(_nextMapFileName)
     nextMapFileName = _nextMapFileName
-    client = Client("127.0.0.1:5349")
+    client = Client("localhost:49648")
 end
 
 function scene.tick()
@@ -25,9 +25,9 @@ end
 function scene.draw()
     lg.print("Connecting...", 80, 80)
 end
-
-function scene.exit()
-    client:close()
-end
+-- 
+-- function scene.exit()
+--     client:close()
+-- end
 
 return scene

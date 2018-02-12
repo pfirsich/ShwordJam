@@ -10,12 +10,14 @@ local Client = class("Client")
 
 
 function Client:initialize(server_host)
+
     self.host = enet.host_create()
     self.server = self.host:connect(server_host)
 end
 
 function Client:handlePackage(type, data)
-    print("got", type)
+    print("handle", type, data)
+
     if type == "update" then
         for _, object in ipairs(data.updates) do
             -- update world
@@ -24,20 +26,15 @@ function Client:handlePackage(type, data)
 end
 
 function Client:processPackage(eventData)
-    local package = pm.unpack(eventData)
-    self:handleEvent(package.type, package.data)
+    local package = mp.unpack(eventData)
+    self:handlePackage(package.type, package.data)
 end
 
 function Client:receive()
     local event = self.host:service()
 
-    if event then
-        print("event", event)
-    end
-
     while event do
         if event.type == "receive" then
-            print("Got message: ", event.data, event.peer)
             self:processPackage(event.data)
         elseif event.type == "connect" then
             error("Invalid state: only just connected")
@@ -63,9 +60,11 @@ function Client:sendUpdate()
         end
     end
 
-    -- netUtils.sendPackage(self.server, "update", {
-    --     updates = updates
-    -- })
+    netUtils.sendPackage(self.server, "update", {
+        updates = updates
+    })
+
+    return nil
 end
 
 function Client:checkConnected()
@@ -77,9 +76,6 @@ function Client:checkConnected()
             if event.type == "receive" then
                 error("Invalid state: Got message while waiting for a connection")
             elseif event.type == "connect" then
-                print("got connected")
-                event.peer:send("ping")
-                self.server:send("ping")
                 return {connected = true}
             elseif event.type == "disconnect" then
                 return {failed = true}
