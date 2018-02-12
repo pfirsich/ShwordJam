@@ -2,6 +2,9 @@ require("enet")
 
 local class = require("libs.class")
 local utils = require("utils")
+local netUtils = require("net.utils")
+local GameObject = require("gameobject")
+local mp = require("libs.MessagePack")
 
 local Client = class("Client")
 
@@ -11,17 +14,34 @@ function Client:initialize(server_host)
     self.server = self.host:connect(server_host)
 end
 
-function Client:tick()
+function Client:handlePackage(type, data)
+    print("got", type)
+    if type == "update" then
+        for _, object in ipairs(data.updates) do
+            -- update world
+        end
+    end
+end
+
+function Client:processPackage(eventData)
+    local package = pm.unpack(eventData)
+    self:handleEvent(package.type, package.data)
+end
+
+function Client:receive()
     local event = self.host:service()
+
+    if event then
+        print("event", event)
+    end
+
     while event do
         if event.type == "receive" then
             print("Got message: ", event.data, event.peer)
-            event.peer:send("ping")
+            self:processPackage(event.data)
         elseif event.type == "connect" then
-            print(event.peer, "connected.")
-            event.peer:send("ping")
+            error("Invalid state: only just connected")
         elseif event.type == "disconnect" then
-            print(event.peer, "disconnected.")
             return "Server disconnected"
         end
         event = self.host:service()
@@ -30,18 +50,36 @@ function Client:tick()
     return nil
 end
 
-function Client:checkConnected()
-    print(utils.inspect(self.server:state()))
+function Client:sendUpdate()
+    local updates = {}
 
+    for _, object in pairs(GameObject.world) do
+        if object.owned then
+            if object.serialize then
+                table.insert(updates, object.serialize())
+            else
+                table.insert(updates, object)
+            end
+        end
+    end
+
+    -- netUtils.sendPackage(self.server, "update", {
+    --     updates = updates
+    -- })
+end
+
+function Client:checkConnected()
     if self.server:state() == "connected" then
-        print("was")
         return {connected = true}
     else
         local event = self.host:service()
         while event do
             if event.type == "receive" then
-                error("Got message while waiting for a connection")
+                error("Invalid state: Got message while waiting for a connection")
             elseif event.type == "connect" then
+                print("got connected")
+                event.peer:send("ping")
+                self.server:send("ping")
                 return {connected = true}
             elseif event.type == "disconnect" then
                 return {failed = true}

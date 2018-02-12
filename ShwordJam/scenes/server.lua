@@ -25,9 +25,11 @@ function scene.enter(mapFileName)
 end
 
 function scene.tick()
-    server:tick()
+    server:receive()
 
     GameObject.updateAll()
+
+    -- server:broadcastUpdate()
 end
 
 function scene.draw(dt)

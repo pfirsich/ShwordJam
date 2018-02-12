@@ -15,7 +15,6 @@ end
 
 function scene.tick()
     local status = client:checkConnected()
-    print(utils.inspect(status))
     if status.connected then
         enterScene(scenes.game, nextMapFileName, client)
     elseif status.failed then
