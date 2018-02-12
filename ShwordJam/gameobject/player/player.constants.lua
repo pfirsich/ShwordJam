@@ -22,7 +22,7 @@ return {
         dashInputDelay = 3/60.0, -- frames
         dashThresh = 0.9,
         dashMinDuration = 0.1,
-        dashDuration = 0.2,
+        dashDuration = 0.25,
 
         jumpSquatFrictionFactor = 2.0,
         jumpSquatDuration = 5/60.0,

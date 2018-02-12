@@ -11,6 +11,7 @@ end
 function Wait:enter()
     self.lastMove = nil
     self.player.animator:play('idle')
+    self.canDash = false
 end
 
 function Wait:exit(newState)
@@ -23,6 +24,7 @@ function Wait:update()
     player:friction(const.player.friction)
 
     if math.abs(player.moveDir[1]) <= 1e-5 then
+        self.canDash = true
         self.lastMove = nil
     else
         if not self.lastMove then
@@ -30,16 +32,12 @@ function Wait:update()
         end
     end
 
-    if math.abs(player.moveDir[1]) > const.player.dashThresh then
+    if self.canDash and math.abs(player.moveDir[1]) > const.player.dashThresh then
         player:setState(states.Dash)
     end
 
     if self.lastMove and player.time - self.lastMove > const.player.dashInputDelay then
-        if math.abs(player.moveDir[1]) > const.player.dashThresh then
-            player:setState(states.Dash)
-        elseif math.abs(player.moveDir[1]) > 1e-5 then
-            player:setState(states.Run)
-        end
+        player:setState(states.Run)
     end
 
     if player.controller.jump.pressed then
