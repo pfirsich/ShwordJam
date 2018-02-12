@@ -10,6 +10,7 @@ require("libs.strict")
 local scenes = require("scenes")
 local utils = require("utils")
 local const = require("constants")
+local Animator = require("animator")
 
 function love.load()
     requireScenes()
@@ -38,6 +39,7 @@ function love.keypressed(key)
     local ctrl = lk.isDown("lctrl") or lk.isDown("rctrl")
     if ctrl and key == "r" then
         const.reload()
+        Animator.reloadAnimationFiles()
     end
 end
 

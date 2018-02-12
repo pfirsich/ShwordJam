@@ -11,6 +11,7 @@ local modified = utils.ModifiedChecker()
 
 function Animator.reloadAnimationFiles()
     for path, file in pairs(Animator.animationFiles) do
+        print(("Reload animator %s"):format(path))
         Animator.load(path)
     end
 end
@@ -58,7 +59,7 @@ function Animator:updateAnimations(animations)
 end
 
 function Animator:play(name, speedMultiplier)
-    self.current = self.animations[name]
+    self.current = name
     self.speedMultiplier = speedMultiplier or 1
     self.time = 0
 end
@@ -66,7 +67,7 @@ end
 function Animator:update(dt)
     if self.current then
         self.time = self.time + dt * self.speedMultiplier
-        self.current:apply(self.target, self.time)
+        self.animations[self.current]:apply(self.target, self.time)
     end
 end
 

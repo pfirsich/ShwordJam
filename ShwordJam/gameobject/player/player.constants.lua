@@ -1,7 +1,7 @@
 return {
     player = {
         width = 0.8,
-        height = 1.3,
+        height = 1,
 
         moveDeadzone = 0.25,
 

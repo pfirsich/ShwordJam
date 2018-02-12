@@ -10,8 +10,8 @@ return {
             },
             {
                 _time = 0.5,
-                scaleX = 0.7,
-                scaleY = 0.7,
+                scaleX = 0.85,
+                scaleY = 0.95,
             },
             {
                 _time = 1,

@@ -124,16 +124,24 @@ end
 function Player:draw(dt)
     self.animator:update(dt)
     local pconst = const.player
-    lg.setColor(0, 0, 255)
+    lg.setColor(255, 255, 255)
 
-    lg.push()
+    do
+        lg.push()
 
-    local p = self.drawParams
-    lg.translate(p.x, p.y)
-    lg.rotate(p.angle)
-    lg.scale(p.scaleX, p.scaleY)
-    local x, y, w, h = self.position[1], self.position[2], pconst.width, pconst.height
-    lg.rectangle("fill", x - w/2, y - h/2, w, h)
+        local p = self.drawParams
+        lg.translate(unpack(self.position))
+        lg.translate(p.x, p.y)
+
+        lg.translate(0, pconst.height * (1 - p.scaleY) / 2)
+        lg.rotate(p.angle)
+        -- lg.scale(p.scaleX, p.scaleY)
+        local w, h = pconst.width * p.scaleX, pconst.height * p.scaleY
+        print(h)
+        lg.rectangle("fill", -w/2, -h/2, w, h)
+
+        lg.pop()
+    end
 end
 
 function Player:hudDraw()
