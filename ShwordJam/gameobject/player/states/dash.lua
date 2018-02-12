@@ -12,6 +12,8 @@ end
 function Dash:enter()
     self.direction = self.player.moveDir[1] > 0 and 1 or -1
     self.player.velocity[1] = self.direction * const.player.dashSpeedFactor * const.player.maxMoveSpeed
+
+    self.player.animator:play('dash')
 end
 
 function Dash:exit(newState)
