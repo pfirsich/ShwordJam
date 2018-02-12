@@ -81,8 +81,9 @@ return {
     },
 
     run = {
-        speed = 1,
+        speed = 3,
         loop = true,
+        loopPoint = 1,
         keyFrames = {
             {
                 _time = 0,
@@ -90,12 +91,27 @@ return {
                 scaleY = 1,
             },
             {
-                _time = 0.5,
-                scaleX = 0.1,
-                scaleY = 0.95,
+                _time = 0.15,
+                scaleX = 0.9,
+                scaleY = 1.1,
+            },
+            {
+                _time = 0.25,
+                scaleX = 0.85,
+                scaleY = 1.15,
             },
             {
                 _time = 1,
+                scaleX = 1,
+                scaleY = 1,
+            },
+            {
+                _time = 1.5,
+                scaleX = 0.95,
+                scaleY = 1.05,
+            },
+            {
+                _time = 2,
                 scaleX = 1,
                 scaleY = 1,
             },
