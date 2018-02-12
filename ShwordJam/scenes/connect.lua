@@ -30,9 +30,8 @@ function scene.draw()
     lg.setFont(fonts.big)
     lg.print("Connecting...", 80, 80)
 end
---
--- function scene.exit()
---     client:close()
--- end
+
+function scene.exit()
+end
 
 return scene
