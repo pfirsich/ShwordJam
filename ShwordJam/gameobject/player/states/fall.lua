@@ -75,6 +75,8 @@ function Fall:update()
     if player:onGround() then
         player:setState(states.Wait)
     end
+
+    player:enterAimShword()
 end
 
 return Fall

@@ -21,15 +21,8 @@ function AimShwordGround:exit(newState)
 
 end
 
-function AimShwordGround:update()
+function AimShwordGround:checkShwordInput()
     local player = self.player
-
-    player:friction(const.player.friction)
-
-    if not player:onGround() then
-        player:setState(states.Fall)
-    end
-
     local button = player.controller[self.kind]
     if not button.state then
         local dir = vmath.normed(player.moveDir)
@@ -40,6 +33,18 @@ function AimShwordGround:update()
             player:setState(states.Wait)
         end
     end
+end
+
+function AimShwordGround:update()
+    local player = self.player
+
+    player:friction(const.player.friction)
+
+    if not player:onGround() then
+        player:setState(states.Fall)
+    end
+
+    self:checkShwordInput()
 end
 
 function AimShwordGround:preDraw()

@@ -17,6 +17,7 @@ local Player = class("Player", GameObject)
 
 function Player:initialize(controller, spawnPosition)
     GameObject.initialize(self)
+    self.depth = 1
     self.controller = controller
     self.position = spawnPosition
     self.velocity = {0, 0}
@@ -85,6 +86,25 @@ function Player:onGround()
         end
     end
     return false
+end
+
+function Player:enterAimShword()
+    for _, kind in ipairs(Shword.kinds) do
+        if self.controller[kind].state then
+            local shword = self.shwords[kind] and GameObject.getById(self.shwords[kind])
+            if shword then
+                self.position = vmath.copy(shword.position)
+                self.shwords[kind] = nil
+                shword:removeFromWorld()
+            else
+                if self:onGround() then
+                    self:setState(states.AimShwordGround, kind)
+                else
+                    self:setState(states.AimShwordAir, kind)
+                end
+            end
+        end
+    end
 end
 
 function Player:shootShword(kind)

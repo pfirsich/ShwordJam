@@ -61,7 +61,7 @@ function Shword:initialize(player, kind, position, direction)
     self.position = vmath.copy(position)
     assert(vmath.len(direction) > 1e-5)
     self.direction = vmath.normed(direction)
-    self.velocity = vmath.mul(direction, const.shword.speed)
+    self.velocity = vmath.mul(self.direction, const.shword.speed)
     self.shape = GameObject.collider:circle(0, 0, const.shword.collisionRadius)
     self.shape._object = self
     self.player = player.id

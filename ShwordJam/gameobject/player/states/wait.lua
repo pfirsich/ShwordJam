@@ -53,11 +53,7 @@ function Wait:update()
         return
     end
 
-    for _, shword in ipairs(Shword.kinds) do
-        if player.controller[shword].state then
-            player:setState(states.AimShwordGround, shword)
-        end
-    end
+    player:enterAimShword()
 end
 
 return Wait

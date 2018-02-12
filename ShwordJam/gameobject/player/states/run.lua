@@ -44,6 +44,8 @@ function Run:update()
     if not player:onGround() then
         player:setState(states.Fall)
     end
+
+    player:enterAimShword()
 end
 
 return Run
