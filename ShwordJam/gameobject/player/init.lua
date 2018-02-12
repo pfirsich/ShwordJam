@@ -86,6 +86,8 @@ function Player:update()
     self.moveDir = {self.controller.moveX.state, self.controller.moveY.state}
     if vmath.len(self.moveDir) < pconst.moveDeadzone then
         self.moveDir = {0, 0}
+    else
+        self.moveDir = vmath.mul(self.moveDir, vmath.len(self.moveDir) / (1 - const.player.moveDeadzone))
     end
 
     self.time = self.time + const.SIM_DT
