@@ -1,7 +1,7 @@
 return {
     player = {
         width = 0.8,
-        height = 1.3,
+        height = 1,
 
         moveDeadzone = 0.25,
 
@@ -29,7 +29,7 @@ return {
 
         jumpStartSpeed = 13.0,
         shorthopFactor = 0.67,
-        jumpMaxMoveSpeedFactor = 0.7,
+        jumpMaxMoveSpeedFactor = 0.9,
         groundToJumpMoveSpeedFactor = 0.8,
         jumpMoveSpeedFactor = 0.5,
 

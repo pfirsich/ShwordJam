@@ -33,9 +33,9 @@ function scene.tick()
     camera.scale = 50
 end
 
-function scene.draw()
+function scene.draw(dt)
     camera.push()
-    GameObject.drawAll()
+    GameObject.drawAll(dt)
     camera.pop()
 
     GameObject.callAll("hudDraw")

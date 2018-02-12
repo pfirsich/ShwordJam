@@ -1,5 +1,6 @@
 local class = require("libs.class")
 local const = require("constants")
+local Animator = require("animator")
 local utils = require("utils")
 local vmath = require("utils.vmath")
 local GameObject = require("gameobject")
@@ -18,9 +19,19 @@ function Player:initialize(controller, spawnPosition)
     self.velocity = {0, 0}
     self.shape = GameObject.collider:rectangle(0, 0, const.player.width, const.player.height)
     self.shape._object = self
-    self:setState(states.Wait)
     self.time = 0
     self.frameCounter = 0
+
+    self.drawParams = {
+        x = 0,
+        y = 0,
+        angle = 0,
+        scaleX = 1,
+        scaleY = 1,
+    }
+    self.animator = Animator(self.drawParams, "animations/player.lua")
+
+    self:setState(states.Wait)
 
     local w, h = const.player.width * const.player.groundProbeWidthFactor, const.player.groundProbeHeight
     self._groundProbe = HCshapes.newPolygonShape(0, 0,  w, 0,  w, h,  0, h)
@@ -115,11 +126,26 @@ function Player:updateCollisions()
     end
 end
 
-function Player:draw()
+function Player:draw(dt)
+    self.animator:update(dt)
     local pconst = const.player
-    lg.setColor(0, 0, 255)
-    local x, y, w, h = self.position[1], self.position[2], pconst.width, pconst.height
-    lg.rectangle("fill", x - w/2, y - h/2, w, h)
+    lg.setColor(255, 255, 255)
+
+    do
+        lg.push()
+
+        local p = self.drawParams
+        lg.translate(unpack(self.position))
+        lg.translate(p.x, p.y)
+
+        lg.translate(0, pconst.height * (1 - p.scaleY) / 2)
+        lg.rotate(p.angle)
+        -- lg.scale(p.scaleX, p.scaleY)
+        local w, h = pconst.width * p.scaleX, pconst.height * p.scaleY
+        lg.rectangle("fill", -w/2, -h/2, w, h)
+
+        lg.pop()
+    end
 end
 
 function Player:hudDraw()
