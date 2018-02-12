@@ -29,6 +29,10 @@ function Wait:update()
         end
     end
 
+    if math.abs(player.moveDir[1]) > const.player.dashThresh then
+        player:setState(states.Dash)
+    end
+
     if self.lastMove and player.time - self.lastMove > const.player.dashInputDelay then
         if math.abs(player.moveDir[1]) > const.player.dashThresh then
             player:setState(states.Dash)
