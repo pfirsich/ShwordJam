@@ -244,7 +244,7 @@ function maps.loadMapFile(mapFileName)
         end
     end
 
-    local size = { #tileMap, #tileMap[1] }
+    local size = { #tileMap[1], #tileMap }
     return {
         tileMap = tileMap,
         properties = properties,
