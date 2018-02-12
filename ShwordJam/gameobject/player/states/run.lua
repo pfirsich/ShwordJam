@@ -11,7 +11,7 @@ function Run:initialize(player, ...)
 end
 
 function Run:enter()
-
+    self.player.animator:play('run')
 end
 
 function Run:exit(newState)
