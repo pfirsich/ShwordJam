@@ -22,7 +22,7 @@ function AimShwordAir:update()
     end
 
     if player:onGround() then
-        player:setState(states.Wait)
+        player:setState(states.AimShwordGround, self.kind)
     end
 
     self:checkShwordInput()

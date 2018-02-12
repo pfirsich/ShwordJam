@@ -26,6 +26,8 @@ function Player:initialize(controller, spawnPosition)
     self.time = 0
     self.frameCounter = 0
     self.shwords = {}
+    self.shwordButtonFresh = {}
+    self.nextTeleport = 0
 
     self.drawParams = {
         x = 0,
@@ -91,18 +93,30 @@ end
 function Player:enterAimShword()
     for _, kind in ipairs(Shword.kinds) do
         if self.controller[kind].state then
-            local shword = self.shwords[kind] and GameObject.getById(self.shwords[kind])
-            if shword then
-                self.position = vmath.copy(shword.position)
-                self.shwords[kind] = nil
-                shword:removeFromWorld()
-            else
-                if self:onGround() then
-                    self:setState(states.AimShwordGround, kind)
+            if self.shwordButtonFresh[kind] then
+                self.shwordButtonFresh[kind] = false
+                local shword = self.shwords[kind] and
+                    GameObject.getById(self.shwords[kind])
+                if shword then
+                    if self.nextTeleport < self.time then
+                        self.nextTeleport = self.time +
+                            const.player.teleportCooldown
+                        self.position = vmath.copy(shword.position)
+                        if shword.stuck then
+                            self.shwords[kind] = nil
+                            shword:removeFromWorld()
+                        end
+                    end
                 else
-                    self:setState(states.AimShwordAir, kind)
+                    if self:onGround() then
+                        self:setState(states.AimShwordGround, kind)
+                    else
+                        self:setState(states.AimShwordAir, kind)
+                    end
                 end
             end
+        else
+            self.shwordButtonFresh[kind] = true
         end
     end
 end

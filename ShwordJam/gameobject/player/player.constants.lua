@@ -41,5 +41,7 @@ return {
         runEndFactor = 0.1,
 
         aimShwordRadius = 1.2,
+        aimShwordFrictionFactor = 0.2,
+        teleportCooldown = 0.5,
     }
 }

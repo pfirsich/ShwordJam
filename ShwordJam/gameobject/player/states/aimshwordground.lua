@@ -38,10 +38,10 @@ end
 function AimShwordGround:update()
     local player = self.player
 
-    player:friction(const.player.friction)
+    player:friction(const.player.friction * const.player.aimShwordFrictionFactor)
 
     if not player:onGround() then
-        player:setState(states.Fall)
+        player:setState(states.AimShwordAir, self.kind)
     end
 
     self:checkShwordInput()

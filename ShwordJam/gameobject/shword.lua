@@ -65,6 +65,7 @@ function Shword:initialize(player, kind, position, direction)
     self.shape = GameObject.collider:circle(0, 0, const.shword.collisionRadius)
     self.shape._object = self
     self.player = player.id
+    self.stuck = false
 end
 
 function Shword:update()
@@ -77,6 +78,7 @@ function Shword:update()
             self.position = vmath.add(self.position, {mtv.x, mtv.y})
             self.shape:moveTo(unpack(self.position))
             self.velocity = {0, 0}
+            self.stuck = true
         elseif other._object.class.name == "Player" then
             -- do something
         end
