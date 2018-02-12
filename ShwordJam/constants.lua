@@ -7,12 +7,7 @@ local function setupConstants()
     -- pass
 end
 
-local lastModified = {}
-
-local function modified(path)
-    local mod = lf.getLastModified(path)
-    return not lastModified[path] or lastModified[path] < mod
-end
+local modified = utils.ModifiedChecker()
 
 function const.reload(root, dontSetup)
     root = root or ""

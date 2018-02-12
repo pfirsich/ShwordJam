@@ -20,6 +20,15 @@ function utils.nop()
     -- pass
 end
 
+function utils.ModifiedChecker()
+    local lastModified = {}
+
+    return function(path)
+        local mod = lf.getLastModified(path)
+        return not lastModified[path] or lastModified[path] < mod
+    end
+end
+
 for _, item in ipairs(lf.getDirectoryItems("utils")) do
     local path = "scenes/" .. item
     if item ~= "init.lua" then

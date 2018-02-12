@@ -20,9 +20,9 @@ function GameObject.updateAll()
     table.sort(GameObject.world, gameObjectCmp)
 end
 
-function GameObject.drawAll()
+function GameObject.drawAll(dt)
     for _, object in ipairs(GameObject.world) do
-        object:draw()
+        object:draw(dt)
     end
 end
 

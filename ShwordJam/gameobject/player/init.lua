@@ -1,5 +1,6 @@
 local class = require("libs.class")
 local const = require("constants")
+local Animator = require("animator")
 local utils = require("utils")
 local vmath = require("utils.vmath")
 local GameObject = require("gameobject")
@@ -21,6 +22,16 @@ function Player:initialize(controller, spawnPosition)
     self:setState(states.Wait)
     self.time = 0
     self.frameCounter = 0
+
+    self.drawParams = {
+        x = 0,
+        y = 0,
+        angle = 0,
+        scaleX = 1,
+        scaleY = 1,
+    }
+    self.animator = Animator(self.drawParams, "animations/player.lua")
+    self.animator:play("idle")
 
     self._groundProbe = HCshapes.newPointShape(0, 0)
 end
@@ -105,11 +116,22 @@ function Player:updateCollisions()
     end
 end
 
-function Player:draw()
+function Player:draw(dt)
+    self.animator:update(dt)
     local pconst = const.player
     lg.setColor(0, 0, 255)
+
+    lg.push()
+
+    local p = self.drawParams
+    lg.translate(p.x, p.y)
+    lg.rotate(p.angle)
+    lg.scale(p.scaleX, p.scaleY)
     local x, y, w, h = self.position[1], self.position[2], pconst.width, pconst.height
     lg.rectangle("fill", x - w/2, y - h/2, w, h)
+
+    lg.pop()
+
     lg.setColor(255, 0, 0)
     self.shape:draw("fill")
     lg.setColor(255, 255, 255)
