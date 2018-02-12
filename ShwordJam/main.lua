@@ -24,7 +24,11 @@ function love.load(args)
         utils.callNonNil(scene.load)
     end
 
-    enterScene(scenes.game, 'test')
+    if args[2] == "--server" then
+        enterScene(scenes.server, "test")
+    else
+        enterScene(scenes.connect, "test")
+    end
 end
 
 function love.update()
@@ -40,6 +44,9 @@ function love.keypressed(key)
     if ctrl and key == "r" then
         const.reload()
         Animator.reloadAnimationFiles()
+    end
+    if ctrl and key == "return" then
+        enterScene(scenes.game, 'test')
     end
 end
 
@@ -68,6 +75,7 @@ function love.run()
                 for name, a,b,c,d,e,f in love.event.poll() do
                     if name == "quit" then
                         if not love.quit or not love.quit() then
+                            utils.callNonNil(scene.exit)
                             return a
                         end
                     end

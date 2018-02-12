@@ -12,24 +12,24 @@ return {
         maxMoveSpeed = 10.0, -- units/sec
         runStartFactor = 0.5,
         acceleration = 36.0,
-        friction = 30.0, -- units/sec/sec
+        friction = 60.0, -- units/sec/sec
         maxFallSpeed = 12.0,
         gravity = 24.0,
         fastFallThresh = 0.85,
         fastFallFactor = 1.7,
 
-        dashSpeedFactor = 1.1,
-        dashInputDelay = 1/60.0, -- frames
+        dashSpeedFactor = 1.2,
+        dashInputDelay = 3/60.0,
         dashThresh = 0.9,
         dashMinDuration = 0.1,
-        dashDuration = 0.25,
+        dashDuration = 20/60.0,
 
         jumpSquatFrictionFactor = 2.0,
         jumpSquatDuration = 5/60.0,
 
-        jumpStartSpeed = 13.0,
+        jumpStartSpeed = 14.0,
         shorthopFactor = 0.67,
-        jumpMaxMoveSpeedFactor = 0.9,
+        jumpMaxMoveSpeedFactor = 1.0,
         groundToJumpMoveSpeedFactor = 0.8,
         jumpMoveSpeedFactor = 0.5,
 
