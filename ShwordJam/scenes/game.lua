@@ -5,14 +5,18 @@ local vmath = require("utils.vmath")
 local gamepadController, dummyController = unpack(require("controller"))
 local camera = require("camera")
 local utils = require("utils")
+local scenes = require("scenes")
 
 local scene = {name = "game"}
 
-local player
+local client
 
+local player
 local bounds = nil
 
-function scene.enter(mapFileName)
+function scene.enter(mapFileName, _client)
+    client = _client
+
     GameObject.resetWorld()
     local map = maps.loadMapFile(mapFileName)
     bounds = map.size
@@ -30,6 +34,12 @@ function scene.enter(mapFileName)
 end
 
 function scene.tick()
+    local error = client:tick()
+    if error then
+        enterScene(scenes.message, error)
+        return
+    end
+
     GameObject.updateAll()
 
     camera.target.position = vmath.copy(player.position)
@@ -49,6 +59,10 @@ function scene.draw(dt)
     camera.pop()
 
     GameObject.callAll("hudDraw")
+end
+
+function scene.exit()
+    client:close()
 end
 
 return scene

@@ -27,7 +27,7 @@ function love.load(args)
     if args[2] == "--server" then
         enterScene(scenes.server, "test")
     else
-        enterScene(scenes.game, "test")
+        enterScene(scenes.connect, "test")
     end
 end
 
@@ -75,6 +75,7 @@ function love.run()
                 for name, a,b,c,d,e,f in love.event.poll() do
                     if name == "quit" then
                         if not love.quit or not love.quit() then
+                            utils.callNonNil(scene.exit)
                             return a
                         end
                     end
