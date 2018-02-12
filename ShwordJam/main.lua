@@ -47,7 +47,7 @@ function love.keypressed(key)
         Animator.reloadAnimationFiles()
     end
     if ctrl and key == "return" then
-        enterScene(scenes.game, 'test')
+        enterScene(scenes.connect, "test")
     end
 end
 

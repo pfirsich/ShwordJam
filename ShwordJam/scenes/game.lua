@@ -15,9 +15,7 @@ local player
 local map
 
 function scene.enter(mapFileName, _client)
-    if _client then
-        client = _client
-    end
+    client = _client
 
     GameObject.resetWorld()
     map = maps.loadMapFile(mapFileName)
