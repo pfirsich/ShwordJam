@@ -8,7 +8,7 @@ return {
         groundProbeOffsetY = 0.01,
 
         maxMoveSpeed = 10.0, -- units/sec
-        dashSpeedFactor = 0.9,
+        dashSpeedFactor = 1,
         runStartFactor = 0.5,
         acceleration = 36.0,
         friction = 20.0, -- units/sec/sec
@@ -26,7 +26,7 @@ return {
 
         jumpStartSpeed = 12.0,
         shorthopFactor = 0.5,
-        jumpMaxMoveSpeedFactor = 0.7,
+        jumpMaxMoveSpeedFactor = 1,
         groundToJumpMoveSpeedFactor = 0.8,
         jumpMoveSpeedFactor = 0.5,
 
