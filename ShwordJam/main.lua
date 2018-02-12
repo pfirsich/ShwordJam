@@ -12,7 +12,7 @@ local utils = require("utils")
 local const = require("constants")
 local Animator = require("animator")
 
-function love.load()
+function love.load(args)
     requireScenes()
     const.reload()
 
@@ -24,7 +24,11 @@ function love.load()
         utils.callNonNil(scene.load)
     end
 
-    enterScene(scenes.game, 'test')
+    if args[2] == "--server" then
+        enterScene(scenes.server, "test")
+    else
+        enterScene(scenes.game, "test")
+    end
 end
 
 function love.update()
