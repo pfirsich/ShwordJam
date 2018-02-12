@@ -1,6 +1,6 @@
 return {
     jump = {
-        speed = 1,
+        speed = 1.5,
         loop = false,
         keyFrames = {
             {
@@ -12,13 +12,13 @@ return {
             },
             {
                 _time = 0.08,
-                scaleX = 1/0.8,
-                scaleY = 0.8,
+                scaleX = 1/0.6,
+                scaleY = 0.6,
             },
             {
                 _time = 0.19,
-                scaleX = 0.8,
-                scaleY = 1/0.85,
+                scaleX = 0.7,
+                scaleY = 1/0.75,
             },
             {
                 _time = 1,
