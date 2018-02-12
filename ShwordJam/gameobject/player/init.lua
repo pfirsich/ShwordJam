@@ -31,6 +31,7 @@ function Player:initialize(controller, spawnPosition)
         scaleY = 1,
     }
     self.animator = Animator(self.drawParams, "animations/player.lua")
+    self.flipped = false
 
     self:setState(states.Wait)
 
@@ -101,6 +102,11 @@ function Player:update()
     else
         self.moveDir = vmath.mul(self.moveDir, vmath.len(self.moveDir) / (1 - const.player.moveDeadzone))
     end
+    if self.moveDir[1] > 0 then
+        self.flipped = false
+    elseif self.moveDir[1] < 0 then
+        self.flipped = true
+    end
 
     self.time = self.time + const.SIM_DT
     self.frameCounter = self.frameCounter + 1
@@ -139,6 +145,7 @@ function Player:draw(dt)
         lg.translate(unpack(self.position))
         lg.translate(p.x, p.y)
 
+        lg.scale(self.flipped and -1 or 1, 1)
         lg.translate(0, pconst.height * (1 - p.scaleY) / 2)
         lg.rotate(p.angle)
         -- lg.scale(p.scaleX, p.scaleY)
@@ -156,6 +163,7 @@ function Player:hudDraw()
         position = self.position,
         velocity = self.velocity,
         onGround = self:onGround(),
+        flipped = self.flipped,
     }), 5, 30)
     lg.print(self.state:tostring(), 5, 200)
 end
