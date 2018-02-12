@@ -1,6 +1,7 @@
 local const = require("constants")
 local class = require("libs.class")
 local states = require("gameobject.player.states.states")
+local Shword = require("gameobject.shword")
 
 local Wait = class("Wait", states.Base)
 
@@ -34,18 +35,28 @@ function Wait:update()
 
     if self.canDash and math.abs(player.moveDir[1]) > const.player.dashThresh then
         player:setState(states.Dash)
+        return
     end
 
     if self.lastMove and player.time - self.lastMove > const.player.dashInputDelay then
         player:setState(states.Run)
+        return
     end
 
     if player.controller.jump.pressed then
         player:setState(states.JumpSquat)
+        return
     end
 
     if not player:onGround() then
         player:setState(states.Fall)
+        return
+    end
+
+    for _, shword in ipairs(Shword.kinds) do
+        if player.controller[shword].state then
+            player:setState(states.AimShwordGround, shword)
+        end
     end
 end
 

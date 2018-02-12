@@ -29,8 +29,16 @@ function vmath.normed(v)
     return {v[1] / len, v[2] / len}
 end
 
+function vmath.ortho(v)
+    return {v[2], -v[1]}
+end
+
 function vmath.dot(a, b)
     return a[1]*b[1] + a[2]*b[2]
+end
+
+function vmath.angle(v)
+    return math.atan2(v[2], v[1])
 end
 
 function vmath.split(v, normal)

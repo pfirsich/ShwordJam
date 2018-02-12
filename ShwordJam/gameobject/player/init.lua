@@ -5,9 +5,11 @@ local utils = require("utils")
 local vmath = require("utils.vmath")
 local GameObject = require("gameobject")
 local Platform = require("gameobject.platform")
+local Shword = require("gameobject.shword")
 local states = require("gameobject.player.states")
 local HCshapes = require("libs.HC.shapes")
 local fonts = require("fonts")
+local camera = require("camera")
 
 local inspect = utils.inspect
 
@@ -22,6 +24,7 @@ function Player:initialize(controller, spawnPosition)
     self.shape._object = self
     self.time = 0
     self.frameCounter = 0
+    self.shwords = {}
 
     self.drawParams = {
         x = 0,
@@ -83,6 +86,10 @@ function Player:onGround()
     return false
 end
 
+function Player:shootShword(kind)
+    self.shwords[kind] = Shword(self, kind, self.position, self.moveDir).id
+end
+
 function Player:serialize()
 
 end
@@ -127,14 +134,19 @@ function Player:updateCollisions()
     end
 end
 
+function Player:preHudDraw()
+    utils.callNonNil(self.state.preHudDraw, self.state)
+end
+
 function Player:draw(dt)
     self.animator:update(dt)
     local pconst = const.player
     lg.setColor(255, 255, 255)
 
-    do
-        lg.push()
+    utils.callNonNil(self.state.preDraw, self.state)
 
+    lg.push()
+    do
         local p = self.drawParams
         lg.translate(unpack(self.position))
         lg.translate(p.x, p.y)
@@ -144,12 +156,15 @@ function Player:draw(dt)
         -- lg.scale(p.scaleX, p.scaleY)
         local w, h = pconst.width * p.scaleX, pconst.height * p.scaleY
         lg.rectangle("fill", -w/2, -h/2, w, h)
-
-        lg.pop()
     end
+    lg.pop()
+
+    utils.callNonNil(self.state.postDraw, self.state)
 end
 
-function Player:hudDraw()
+function Player:postHudDraw()
+    utils.callNonNil(self.state.postHudDraw, self.state)
+
     lg.setColor(0, 255, 0)
     lg.setFont(fonts.big)
     lg.print(utils.inspect({

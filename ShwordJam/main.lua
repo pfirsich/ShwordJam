@@ -12,7 +12,7 @@ local utils = require("utils")
 local const = require("constants")
 local Animator = require("animator")
 
-function love.load()
+function love.load(args)
     requireScenes()
     const.reload()
 
@@ -59,7 +59,7 @@ function love.run()
     while true do
         -- Process events.
         local scene = getCurrentScene()
-        while scene.simTime < scene.realTime do
+        while scene.simTime <= scene.realTime do
             scene.simTime = scene.simTime + const.SIM_DT
             scene.frameCounter = scene.frameCounter + 1
 

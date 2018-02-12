@@ -45,11 +45,13 @@ function scene.tick()
 end
 
 function scene.draw(dt)
+    GameObject.callAll("preHudDraw")
+
     camera.push()
     GameObject.drawAll(dt)
     camera.pop()
 
-    GameObject.callAll("hudDraw")
+    GameObject.callAll("postHudDraw")
 end
 
 return scene

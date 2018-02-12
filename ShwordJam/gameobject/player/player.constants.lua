@@ -19,7 +19,7 @@ return {
         fastFallFactor = 1.7,
 
         dashSpeedFactor = 1.1,
-        dashInputDelay = 3/60.0, -- frames
+        dashInputDelay = 1/60.0, -- frames
         dashThresh = 0.9,
         dashMinDuration = 0.1,
         dashDuration = 0.25,
@@ -39,5 +39,7 @@ return {
         airFriction = 5.0,
 
         runEndFactor = 0.1,
+
+        aimShwordRadius = 1.2,
     }
 }
