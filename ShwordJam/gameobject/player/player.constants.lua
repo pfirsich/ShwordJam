@@ -27,7 +27,7 @@ return {
         jumpSquatFrictionFactor = 2.0,
         jumpSquatDuration = 5/60.0,
 
-        jumpStartSpeed = 13.0,
+        jumpStartSpeed = 14.0,
         shorthopFactor = 0.67,
         jumpMaxMoveSpeedFactor = 0.9,
         groundToJumpMoveSpeedFactor = 0.8,
