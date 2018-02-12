@@ -31,7 +31,7 @@ function Fall:update()
     end
 
     -- fast falling
-    if player.velocity[2] < 0 and self.canFastFall and player.moveDir[2] > const.player.fastFallThresh then
+    if player.velocity[2] > 0 and self.canFastFall and player.moveDir[2] > const.player.fastFallThresh then
         player.velocity[2] = const.player.maxFallSpeed * const.player.fastFallFactor
     end
 
