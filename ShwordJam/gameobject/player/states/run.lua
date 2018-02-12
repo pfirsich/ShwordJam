@@ -33,8 +33,12 @@ function Run:update()
     end
 
     local runEndSpeed = const.player.maxMoveSpeed * const.player.runEndFactor
-    if math.abs(player.velocity[1]) < runEndSpeed and targetMoveSpeed < runEndSpeed then
+    if math.abs(player.velocity[1]) < runEndSpeed and math.abs(targetMoveSpeed) < runEndSpeed then
         player:setState(states.Wait)
+    end
+
+    if player.controller.jump.pressed then
+        player:setState(states.JumpSquat)
     end
 
     if not player:onGround() then

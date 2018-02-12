@@ -4,7 +4,7 @@ local utils = require("utils")
 local const = {}
 
 local function setupConstants()
-    -- pass
+
 end
 
 local modified = utils.ModifiedChecker()

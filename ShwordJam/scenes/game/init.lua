@@ -38,7 +38,7 @@ function scene.draw(dt)
     GameObject.drawAll(dt)
     camera.pop()
 
-    GameObject.callAll("drawHUD")
+    GameObject.callAll("hudDraw")
 end
 
 return scene

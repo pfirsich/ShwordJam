@@ -37,8 +37,6 @@ end
 function Platform:draw()
     lg.setColor(self.color)
     lg.draw(self.mesh)
-    lg.setColor(0, 255, 0)
-    self.shape:draw("fill")
 end
 
 return Platform
