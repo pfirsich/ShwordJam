@@ -47,7 +47,7 @@ function scene.tick()
 
     camera.target.position = vmath.copy(player.position)
     camera.position = camera.target.position
-    camera.scale = 50
+    camera.scale = 40
 
     local camTopLeftX, camTopLeftY, camBottomRightX, camBottomRightY = camera.getAABB()
     local camW = camBottomRightX - camTopLeftX
