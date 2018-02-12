@@ -12,7 +12,7 @@ local scene = {name = "game"}
 local client
 
 local player
-local bounds = nil
+local map
 
 function scene.enter(mapFileName, _client)
     if _client then
@@ -20,8 +20,7 @@ function scene.enter(mapFileName, _client)
     end
 
     GameObject.resetWorld()
-    local map = maps.loadMapFile(mapFileName)
-    bounds = map.size
+    map = maps.loadMapFile(mapFileName)
 
     maps.loadMap(map.tileMap)
 
@@ -45,6 +44,10 @@ function scene.tick()
 
     GameObject.updateAll()
 
+    if map.properties.background then
+        lg.setBackgroundColor(map.properties.background:match("(%d+)%s*,%s*(%d+)%s*,%s*(%d+)"))
+    end
+
     camera.target.position = vmath.copy(player.position)
     camera.position = camera.target.position
     camera.scale = 40
@@ -52,8 +55,8 @@ function scene.tick()
     local camTopLeftX, camTopLeftY, camBottomRightX, camBottomRightY = camera.getAABB()
     local camW = camBottomRightX - camTopLeftX
     local camH = camBottomRightY - camTopLeftY
-    camera.position[1] = utils.math.clamp(camera.position[1], camW/2 + 1, bounds[1] - camW/2 + 1)
-    camera.position[2] = utils.math.clamp(camera.position[2], camH/2 + 1, bounds[2] - camH/2 + 1)
+    camera.position[1] = utils.math.clamp(camera.position[1], camW/2 + 1, map.size[1] - camW/2 + 1)
+    camera.position[2] = utils.math.clamp(camera.position[2], camH/2 + 1, map.size[2] - camH/2 + 1)
 
     local error = client:sendUpdate()
     if error then
