@@ -7,6 +7,7 @@ local GameObject = require("gameobject")
 local Platform = require("gameobject.platform")
 local states = require("gameobject.player.states")
 local HCshapes = require("libs.HC.shapes")
+local fonts = require("fonts")
 
 local inspect = utils.inspect
 
@@ -149,12 +150,14 @@ function Player:draw(dt)
 end
 
 function Player:hudDraw()
-    lg.setColor(255, 255, 255)
+    lg.setColor(0, 255, 0)
+    lg.setFont(fonts.big)
     lg.print(utils.inspect({
         position = self.position,
         velocity = self.velocity,
-        state = self.state:tostring()
-    }), 5, 25)
+        onGround = self:onGround(),
+    }), 5, 30)
+    lg.print(self.state:tostring(), 5, 200)
 end
 
 return Player
