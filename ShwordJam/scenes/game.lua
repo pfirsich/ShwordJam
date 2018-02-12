@@ -15,7 +15,9 @@ local player
 local bounds = nil
 
 function scene.enter(mapFileName, _client)
-    client = _client
+    if _client then
+        client = _client
+    end
 
     GameObject.resetWorld()
     local map = maps.loadMapFile(mapFileName)
@@ -31,12 +33,13 @@ function scene.enter(mapFileName, _client)
         controller = dummyController()
     end
     player = Player(controller, map.spawnPoints[1])
+
 end
 
 function scene.tick()
-    local error = client:tick()
+    local error = client:receive()
     if error then
-        enterScene(scenes.message, error)
+        enterScene(scenes.message, "Error: " .. error)
         return
     end
 
@@ -51,6 +54,12 @@ function scene.tick()
     local camH = camBottomRightY - camTopLeftY
     camera.position[1] = utils.math.clamp(camera.position[1], camW/2 + 1, bounds[1] - camW/2 + 1)
     camera.position[2] = utils.math.clamp(camera.position[2], camH/2 + 1, bounds[2] - camH/2 + 1)
+
+    local error = client:sendUpdate()
+    if error then
+        enterScene(scenes.message, "Error: " .. error)
+        return
+    end
 end
 
 function scene.draw(dt)
