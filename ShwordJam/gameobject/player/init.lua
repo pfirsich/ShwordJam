@@ -19,7 +19,6 @@ function Player:initialize(controller, spawnPosition)
     self.velocity = {0, 0}
     self.shape = GameObject.collider:rectangle(0, 0, const.player.width, const.player.height)
     self.shape._object = self
-    self:setState(states.Wait)
     self.time = 0
     self.frameCounter = 0
 
@@ -31,7 +30,8 @@ function Player:initialize(controller, spawnPosition)
         scaleY = 1,
     }
     self.animator = Animator(self.drawParams, "animations/player.lua")
-    self.animator:play("idle")
+
+    self:setState(states.Wait)
 
     self._groundProbe = HCshapes.newPointShape(0, 0)
 end

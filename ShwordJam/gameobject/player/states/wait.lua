@@ -10,6 +10,7 @@ end
 
 function Wait:enter()
     self.lastMove = nil
+    self.player.animator:play('idle')
 end
 
 function Wait:exit(newState)

@@ -11,7 +11,7 @@ function JumpSquat:initialize(player, ...)
 end
 
 function JumpSquat:enter()
-
+    self.player.animator:play('jump')
 end
 
 function JumpSquat:exit(newState)
