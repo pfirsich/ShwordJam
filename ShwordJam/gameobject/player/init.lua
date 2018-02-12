@@ -22,7 +22,8 @@ function Player:initialize(controller, spawnPosition)
     self.time = 0
     self.frameCounter = 0
 
-    self._groundProbe = HCshapes.newPointShape(0, 0)
+    local w, h = const.player.width * const.player.groundProbeWidthFactor, const.player.groundProbeHeight
+    self._groundProbe = HCshapes.newPolygonShape(0, 0,  w, 0,  w, h,  0, h)
 end
 
 function Player:setState(stateClass, ...)
@@ -58,7 +59,9 @@ end
 
 function Player:onGround()
     self._groundProbe:moveTo(self.position[1],
-        self.position[2] + const.player.height/2 + const.player.groundProbeOffsetY)
+        self.position[2] + const.player.height/2 +
+        const.player.groundProbeHeight * 0.5 +
+        const.player.groundProbeOffsetY)
     local collisions = GameObject.collider:collisions(self._groundProbe)
     for other, mtv in pairs(collisions) do
         if other._object.class == Platform then
