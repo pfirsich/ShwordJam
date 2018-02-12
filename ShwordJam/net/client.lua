@@ -53,7 +53,7 @@ function Client:sendUpdate()
     for _, object in pairs(GameObject.world) do
         if object.owned then
             if object.serialize then
-                table.insert(updates, object.serialize())
+                table.insert(updates, object:serialize())
             else
                 table.insert(updates, object)
             end

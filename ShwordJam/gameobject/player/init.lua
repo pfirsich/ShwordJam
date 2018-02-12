@@ -43,6 +43,7 @@ function Player:initialize(controller, spawnPosition)
 
     local w, h = const.player.width * const.player.groundProbeWidthFactor, const.player.groundProbeHeight
     self._groundProbe = HCshapes.newPolygonShape(0, 0,  w, 0,  w, h,  0, h)
+    self.owned = true
 end
 
 function Player:setState(stateClass, ...)
@@ -125,12 +126,28 @@ function Player:shootShword(kind)
     self.shwords[kind] = Shword(self, kind, self.position, self.moveDir).id
 end
 
-function Player:serialize()
-
+function Player:serialize(output)
+    local output = {}
+    for k, v in pairs(self) do
+        if
+            not k:match("^_")
+            and type(v) ~= "function"
+            and k ~= "animator" -- FIXME: should be serialize
+            and k ~= "controller"
+            and k ~= "shape"
+            and k ~= "state" -- FIXME: should be serialize
+            and k ~= "class"
+        then
+            output[k] = v
+        end
+    end
+    return output
 end
 
-function Player:deserialize()
-
+function Player:deserialize(input)
+    for k, v in pairs(input) do
+        self[k] = v
+    end
 end
 
 function Player:update()

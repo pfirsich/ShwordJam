@@ -1,10 +1,11 @@
 local mp = require("libs.MessagePack")
+local utils = require("utils")
 local const = require("constants")
 
-local utils = {}
+local netUtils = {}
 
-function utils.sendPackage(peer, type, data)
-    utils.netLog("send", type, data)
+function netUtils.sendPackage(peer, type, data)
+    netUtils.netLog("send", type, data and utils.inspect(data))
 
     peer:send(mp.pack({
         type = type,
@@ -12,11 +13,11 @@ function utils.sendPackage(peer, type, data)
     }))
 end
 
-function utils.netLog(...)
+function netUtils.netLog(...)
     if const.net.log then
         print(...)
     end
 end
 
 
-return utils
+return netUtils
