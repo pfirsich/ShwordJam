@@ -28,7 +28,7 @@ function Fall:update()
         player.velocity[2] = player.velocity[2] + const.player.gravity * const.SIM_DT
     end
 
-    if player.velocity[2] < 0 and canFastFall and player.moveDir[2] > const.player.fastFallThresh then
+    if player.velocity[2] < 0 and self.canFastFall and player.moveDir[2] > const.player.fastFallThresh then
         player.velocity[2] = const.player.maxFallSpeed * const.player.fastFallFactor
     end
 

@@ -25,16 +25,20 @@ function Wait:update()
         self.lastMove = nil
     else
         if not self.lastMove then
-            self.lastMove = player.frameCounter
+            self.lastMove = player.time
         end
     end
 
-    if self.lastMove then
+    if self.lastMove and player.time - self.lastMove > const.player.dashInputDelay then
         if math.abs(player.moveDir[1]) > const.player.dashThresh then
             player:setState(states.Dash)
         elseif math.abs(player.moveDir[1]) > 1e-5 then
             player:setState(states.Run)
         end
+    end
+
+    if player.controller.jump.pressed then
+        player:setState(states.JumpSquat)
     end
 
     if not player:onGround() then

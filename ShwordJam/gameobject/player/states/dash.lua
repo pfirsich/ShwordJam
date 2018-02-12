@@ -34,6 +34,10 @@ function Dash:update()
         end
     end
 
+    if player.controller.jump.pressed then
+        player:setState(states.JumpSquat)
+    end
+
     if not player:onGround() then
         player:setState(states.Fall)
     end

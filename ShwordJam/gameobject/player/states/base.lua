@@ -1,3 +1,4 @@
+local utils = require("utils")
 local class = require("libs.class")
 
 local PlayerState = class("PlayerState")
@@ -33,7 +34,7 @@ function PlayerState:tostring()
     local s = "{\n"
     s = s .. tab .. "class = " .. self.class.name .. ",\n"
     for k, v in pairs(self) do
-        if not inList(k, {"player", "class", "start"}) then
+        if not utils.table.inList({"player", "class", "start"}, k) then
             s = s .. tab .. k .. " = " .. tostring(v) .. ",\n"
         end
     end

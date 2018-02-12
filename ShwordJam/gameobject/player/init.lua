@@ -101,6 +101,11 @@ function Player:updateCollisions()
     for other, mtv in pairs(collisions) do
         if other._object.class == Platform then
             self:move({mtv.x, mtv.y})
+            local normal = {mtv.x, mtv.y}
+            local velNormal, velTangent = vmath.split(self.velocity, normal)
+            if vmath.dot(normal, velNormal) < 0.0 then -- velocity points into surface
+                self.velocity = velTangent
+            end
         end
     end
 end
@@ -110,13 +115,15 @@ function Player:draw()
     lg.setColor(0, 0, 255)
     local x, y, w, h = self.position[1], self.position[2], pconst.width, pconst.height
     lg.rectangle("fill", x - w/2, y - h/2, w, h)
-    lg.setColor(255, 0, 0)
-    self.shape:draw("fill")
-    lg.setColor(255, 255, 255)
 end
 
 function Player:hudDraw()
-    lg.print(utils.inspect({position = self.position, velocity = self.velocity, state = self.state:tostring()}), 5, 5)
+    lg.setColor(255, 255, 255)
+    lg.print(utils.inspect({
+        position = self.position,
+        velocity = self.velocity,
+        state = self.state:tostring()
+    }), 5, 25)
 end
 
 return Player
