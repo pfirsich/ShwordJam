@@ -1,0 +1,5 @@
+return {
+    net = {
+        log = false,
+    }
+}

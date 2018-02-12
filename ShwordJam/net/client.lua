@@ -16,7 +16,7 @@ function Client:initialize(server_host)
 end
 
 function Client:handlePackage(type, data)
-    print("handle", type, data)
+    netUtils.netLog("handle", type, utils.inspect(data))
 
     if type == "update" then
         for _, object in ipairs(data.updates) do
